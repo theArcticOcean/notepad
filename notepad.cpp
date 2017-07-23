@@ -4,6 +4,7 @@
 #include <QtCore>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QFontDialog>
 #include "handler.h"
 
 notePad::notePad(QWidget *parent) : appPath(QCoreApplication::applicationDirPath()),
@@ -45,12 +46,28 @@ notePad::notePad(QWidget *parent) : appPath(QCoreApplication::applicationDirPath
     Undo->setShortcut(QKeySequence(tr("Ctrl+Z")));
     Redo = new QAction("redo",this);
     Redo->setShortcut(QKeySequence(tr("Ctrl+Y")));
+    initFont = new QAction("initFont",this);
+    initFont->setShortcut(QKeySequence(tr("Ctrl+I")));
+    initFont->setToolTip(QObject::tr("set all text with default font:\n"
+                                     "font-family: Sans, "
+                                     "pointSize: 10, "
+                                     "weight: 50, "
+                                     "italic: false"));
+
+    partFont = new QAction("partFont",this);
+    partFont->setShortcut(QKeySequence(tr("Ctrl+P")));
+    partFont->setToolTip(tr("set partial text with user's font\n"
+                            "which is chosen in font dialog."));
+
 
     editMenu->addAction(Copy);
     editMenu->addAction(Paste);
     editMenu->addAction(Cut);
     editMenu->addAction(Undo);
     editMenu->addAction(Redo);
+    editMenu->addAction(initFont);
+    editMenu->addAction(partFont);
+    editMenu->setToolTipsVisible(true);
 
     findMenu = new QMenu("find");
     find = new QAction("find",this);
@@ -96,6 +113,9 @@ notePad::notePad(QWidget *parent) : appPath(QCoreApplication::applicationDirPath
     connect(Cut,SIGNAL(triggered()),this,SLOT(actionCut_triggered()));
     connect(Undo,SIGNAL(triggered()),this,SLOT(actionUndo_triggered()));
     connect(Redo,SIGNAL(triggered()),this,SLOT(actionRedo_triggered()));
+    connect(initFont,SIGNAL(triggered()),this,SLOT(actionInitFont()));
+    connect(partFont,SIGNAL(triggered()),this,SLOT(actionPartFont()));
+
     connect(timer,SIGNAL(timeout()),this,SLOT(backup()));
     connect(find,SIGNAL(triggered()),this,SLOT(actionFind_triggered()));
     connect(replace,SIGNAL(triggered()),this,SLOT(actionReplace_triggered()));
@@ -214,6 +234,30 @@ void notePad::actionReplace_triggered()
     // forbid minimize when click father widget.
     // replacer->setWindowFlags(replacer->windowFlags() & ~Qt::WindowMinimized);
     replacer->show();
+}
+
+void notePad::actionInitFont()
+{
+    QWidget *w = tabwidget->currentWidget();
+    QTextEdit *textEdit = static_cast<QTextEdit *>(w);
+    QString text = textEdit->toPlainText();
+    textEdit->setText(text);
+    QFont f("Sans",10,50,false);
+    textEdit->selectAll();
+    textEdit->setCurrentFont(f);
+    textEdit->setTextColor(Qt::black);
+}
+
+void notePad::actionPartFont()
+{
+    bool ok;
+    QFont font = QFontDialog::getFont(
+                    &ok, QFont("Sans",10,50,false), this);
+    if (ok) {
+        QWidget *w = tabwidget->currentWidget();
+        QTextEdit *textEdit = static_cast<QTextEdit *>(w);
+        textEdit->setCurrentFont(font);
+    }
 }
 
 void notePad::backup()

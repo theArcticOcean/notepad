@@ -23,6 +23,7 @@ class notePad : public QMainWindow
     QAction *New, *Open, *Save, *Save_as;
     QAction *Copy,*Paste,*Cut,*Undo,*Redo;
     QAction *find, *replace;
+    QAction *initFont, *partFont;
     QTabWidget *tabwidget;
 
     QTimer *timer;
@@ -64,6 +65,10 @@ public slots:
     void actionFind_triggered();
 
     void actionReplace_triggered();
+
+    void actionInitFont();
+
+    void actionPartFont();
 
     void backup();
 
