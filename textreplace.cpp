@@ -172,36 +172,15 @@ void textReplace::simRepThisFun()
 
 void textReplace::regRepAll()
 {
-    QString path = QCoreApplication::applicationDirPath()+"/backup/";
-    QString currentFile = tabWidget->tabText(tabWidget->currentIndex());
-    QFile file(path+currentFile);
-    qDebug()<<"regRepAll start: "<<path+currentFile;
     QString newText = "";
-    if(file.open(QFile::ReadOnly | QFile::Text)){
-        QTextStream in(&file);
-        QString line = in.readLine();
-        while(!line.isEmpty()){
-            line.replace(QRegExp(fromText->text()),toText->text());
-            newText = newText+line+"\n";
-            line = in.readLine();
-        }
-        file.close();
+    QTextEdit *curEdit = static_cast<QTextEdit *>(tabWidget->currentWidget());
+    QString Text = curEdit->toPlainText();
+    QStringList list = Text.split('\n');
+    foreach (QString line, list) {
+        line = line.replace(QRegExp(fromText->text()),toText->text());
+        newText = newText+line+"\n";
     }
-    else {
-        qDebug()<<"regRepAll read open fail.";
-        return ;
-    }
-    qDebug()<<newText;
-    QFile newFile(path+currentFile);
-    if(newFile.open(QFile::WriteOnly | QFile::Text | QIODevice::Truncate)){
-        QTextStream out(&newFile);
-        out<<newText;
-        newFile.flush();
-        newFile.close();
-        QTextEdit *textEdit = (QTextEdit *)tabWidget->currentWidget();
-        textEdit->setPlainText(newText);
-    }
-    else qDebug()<<"regRepAll write open fail.";
+    curEdit->setPlainText(newText);
 }
 
 

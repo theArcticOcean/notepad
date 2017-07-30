@@ -54,10 +54,10 @@ notePad::notePad(QWidget *parent) : appPath(QCoreApplication::applicationDirPath
                                      "weight: 50, "
                                      "italic: false"));
 
-    partFont = new QAction("partFont",this);
-    partFont->setShortcut(QKeySequence(tr("Ctrl+P")));
-    partFont->setToolTip(tr("set partial text with user's font\n"
-                            "which is chosen in font dialog."));
+//    partFont = new QAction("partFont",this);
+//    partFont->setShortcut(QKeySequence(tr("Ctrl+P")));
+//    partFont->setToolTip(tr("set partial text with user's font\n"
+//                            "which is chosen in font dialog."));
 
 
     editMenu->addAction(Copy);
@@ -66,7 +66,7 @@ notePad::notePad(QWidget *parent) : appPath(QCoreApplication::applicationDirPath
     editMenu->addAction(Undo);
     editMenu->addAction(Redo);
     editMenu->addAction(initFont);
-    editMenu->addAction(partFont);
+//    editMenu->addAction(partFont);
     editMenu->setToolTipsVisible(true);
 
     findMenu = new QMenu("find");
@@ -114,7 +114,7 @@ notePad::notePad(QWidget *parent) : appPath(QCoreApplication::applicationDirPath
     connect(Undo,SIGNAL(triggered()),this,SLOT(actionUndo_triggered()));
     connect(Redo,SIGNAL(triggered()),this,SLOT(actionRedo_triggered()));
     connect(initFont,SIGNAL(triggered()),this,SLOT(actionInitFont()));
-    connect(partFont,SIGNAL(triggered()),this,SLOT(actionPartFont()));
+//    connect(partFont,SIGNAL(triggered()),this,SLOT(actionPartFont()));
 
     connect(timer,SIGNAL(timeout()),this,SLOT(backup()));
     connect(find,SIGNAL(triggered()),this,SLOT(actionFind_triggered()));
@@ -138,6 +138,9 @@ void notePad::actionNew_triggered()
     QIcon *icon = new QIcon(":/images/new.png");
     tabwidget->addTab(text,*icon,fileName);
     tabwidget->setCurrentWidget(text);
+    QString label = QString("new &%1").arg(newCount);
+    tabwidget->setTabText(newCount-1,label);
+    //qDebug()<<tabwidget->currentIndex();
 }
 
 void notePad::actionPaste_triggered()
@@ -242,23 +245,27 @@ void notePad::actionInitFont()
     QTextEdit *textEdit = static_cast<QTextEdit *>(w);
     QString text = textEdit->toPlainText();
     textEdit->setText(text);
-    QFont f("Sans",10,50,false);
+    QFont f;
+    f.setPixelSize(-1);
+    f.setFamily("Sans");
+    f.setPointSize(10);
+    f.setWeight(50);
     textEdit->selectAll();
     textEdit->setCurrentFont(f);
     textEdit->setTextColor(Qt::black);
 }
 
-void notePad::actionPartFont()
-{
-    bool ok;
-    QFont font = QFontDialog::getFont(
-                    &ok, QFont("Sans",10,50,false), this);
-    if (ok) {
-        QWidget *w = tabwidget->currentWidget();
-        QTextEdit *textEdit = static_cast<QTextEdit *>(w);
-        textEdit->setCurrentFont(font);
-    }
-}
+//void notePad::actionPartFont()
+//{
+//    bool ok;
+//    QFont font = QFontDialog::getFont(
+//                    &ok, QFont("Sans",10,50,false), this);
+//    if (ok) {
+//        QWidget *w = tabwidget->currentWidget();
+//        QTextEdit *textEdit = static_cast<QTextEdit *>(w);
+//        textEdit->setCurrentFont(font);
+//    }
+//}
 
 void notePad::backup()
 {
