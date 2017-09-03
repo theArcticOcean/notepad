@@ -11,6 +11,8 @@
 #include "textreplace.h"
 #include "regLighter.h"
 #include "xmlrecorder.h"
+#include "charlocker.h"
+#include "charmap.h"
 
 class notePad : public QMainWindow
 {
@@ -20,11 +22,16 @@ class notePad : public QMainWindow
     QMenu *fileMenu;
     QMenu *editMenu;
     QMenu *findMenu;
+    QMenu *cryptMenu;
+
     QAction *New, *Open, *Save, *Save_as;
     QAction *Copy,*Paste,*Cut,*Undo,*Redo;
     QAction *find, *replace;
-    QAction *initFont;// *partFont;
+    QAction *initFont;                  // *partFont;
+    QAction *encrypt;
+    QAction *decrypt;
     QTabWidget *tabwidget;
+    charMap *char_map;
 
     QTimer *timer;
     qint8 newCount;
@@ -41,7 +48,12 @@ public:
 
 signals:    
     void changeFileName(QString str);
+
 public slots:
+    void actionEncrypt();
+
+    void actionDecrypt();
+
     void deleteTab(int index);
 
     void actionNew_triggered();

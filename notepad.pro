@@ -9,7 +9,8 @@ SOURCES += \
     regLighter.cpp \
     simlighter.cpp \
     textreplace.cpp \
-    xmlrecorder.cpp
+    xmlrecorder.cpp \
+    charmap.cpp
 
 HEADERS += \
     notepad.h \
@@ -18,7 +19,8 @@ HEADERS += \
     regLighter.h \
     simlighter.h \
     textreplace.h \
-    xmlrecorder.h
+    xmlrecorder.h \
+    charmap.h
 
 RESOURCES += \
     images.qrc

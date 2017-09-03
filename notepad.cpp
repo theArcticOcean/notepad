@@ -13,9 +13,10 @@ notePad::notePad(QWidget *parent) : appPath(QCoreApplication::applicationDirPath
     finder = 0;
     replacer = 0;
 
+    char_map = new charMap("./folder/.map");
     menubar = new QMenuBar();
     timer = new QTimer();
-    timer->setInterval(5000);
+    timer->setInterval(7000);
     timer->start();
     fileMenu = new QMenu("file");
 
@@ -77,9 +78,19 @@ notePad::notePad(QWidget *parent) : appPath(QCoreApplication::applicationDirPath
     replace->setShortcut(QKeySequence(tr("Ctrl+R")));
     findMenu->addAction(replace);
 
+    cryptMenu = new QMenu("en/decrypt");
+
+    encrypt = new QAction("encrypt",this);
+    encrypt->setShortcut(QKeySequence(tr("ctrl+E")));
+    decrypt = new QAction("decrypt",this);
+    decrypt->setShortcut(QKeySequence(tr("ctrl+D")));
+    cryptMenu->addAction(encrypt);
+    cryptMenu->addAction(decrypt);
+
     menubar->addMenu(fileMenu);
     menubar->addMenu(editMenu);
     menubar->addMenu(findMenu);
+    menubar->addMenu(cryptMenu);
 
     this->setMenuBar(menubar);
     tabwidget = new QTabWidget();
@@ -119,6 +130,69 @@ notePad::notePad(QWidget *parent) : appPath(QCoreApplication::applicationDirPath
     connect(timer,SIGNAL(timeout()),this,SLOT(backup()));
     connect(find,SIGNAL(triggered()),this,SLOT(actionFind_triggered()));
     connect(replace,SIGNAL(triggered()),this,SLOT(actionReplace_triggered()));
+    connect(encrypt,SIGNAL(triggered()),this,SLOT(actionEncrypt()));
+    connect(decrypt,SIGNAL(triggered()),this,SLOT(actionDecrypt()));
+
+}
+
+void notePad::actionEncrypt()
+{
+    int i;
+    int key;
+    int value;
+    int bytes_number;
+    char *bytes;
+    QWidget *w;
+    QTextEdit *textEdit;
+
+    timer->stop();
+    char_map->create_map();
+    w = tabwidget->currentWidget();
+    textEdit = static_cast<QTextEdit *>(w);
+    fileName = tabwidget->tabText(tabwidget->currentIndex());
+    path = appPath+"/backup/"+fileName;
+
+    bytes = bytesRead(path.toLatin1(),&bytes_number);
+    QMap<int,int> text_map = char_map->getMap();
+    for(i=0;i<bytes_number;i++){
+        key = bytes[i]+128;
+        value = text_map[key];
+        bytes[i] = value-128;
+    }
+    bytesWrite(path.toLatin1(),bytes,bytes_number);
+    textEdit->setPlainText(bytes);
+}
+/*
+QString::toLatin1() --> QByteArray
+QByteArray --> QString
+*/
+void notePad::actionDecrypt()
+{
+    int bytes_number;
+    char *bytes;
+    int i;
+    int key;
+    int value;
+    QWidget *w ;
+    QTextEdit *textEdit;
+    QString text;
+
+    char_map->read_map();
+    w = tabwidget->currentWidget();
+    textEdit = static_cast<QTextEdit *>(w);
+    fileName = tabwidget->tabText(tabwidget->currentIndex());
+    path = appPath+"/backup/"+fileName;
+    bytes = bytesRead(path.toLatin1(),&bytes_number);
+
+    QMap<int,int> text_map = char_map->getMap();
+    for(i=0;i<bytes_number;i++){
+        value = bytes[i]+128;
+        key = text_map.key(value); //charMap.key(value);
+        bytes[i] = key-128;
+    }
+    bytesWrite(path.toLatin1(),bytes,bytes_number);
+    textEdit->setPlainText(bytes);
+    timer->start();
 }
 
 void notePad::deleteTab(int index)
