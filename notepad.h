@@ -11,7 +11,6 @@
 #include "textreplace.h"
 #include "regLighter.h"
 #include "xmlrecorder.h"
-#include "charlocker.h"
 #include "charmap.h"
 
 class notePad : public QMainWindow
