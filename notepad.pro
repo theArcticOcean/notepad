@@ -1,26 +1,30 @@
 QT       += core gui xml
+TRANSLATIONS += English.ts Chinese.ts
+MOC_DIR = ./build/moc_cpp
+OBJECTS_DIR = ./build
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-SOURCES += \
-    main.cpp \
-    notepad.cpp \
-    handler.cpp \
-    textfind.cpp \
-    regLighter.cpp \
-    simlighter.cpp \
-    textreplace.cpp \
-    xmlrecorder.cpp \
-    charmap.cpp
-
 HEADERS += \
-    notepad.h \
-    handler.h \
-    textfind.h \
-    regLighter.h \
-    simlighter.h \
-    textreplace.h \
-    xmlrecorder.h \
-    charmap.h
+    Inc/textreplace.h \
+    Inc/textfind.h \
+    Inc/simlighter.h \
+    Inc/regLighter.h \
+    Inc/notepad.h \
+    Inc/handler.h \
+    Inc/charmap.h \
+    Inc/xmlrecorder.h
+
+SOURCES += \
+    Src/xmlrecorder.cpp \
+    Src/textreplace.cpp \
+    Src/textfind.cpp \
+    Src/simlighter.cpp \
+    Src/regLighter.cpp \
+    Src/notepad.cpp \
+    Src/main.cpp \
+    Src/handler.cpp \
+    Src/charmap.cpp
 
 RESOURCES += \
-    images.qrc
+    image.qrc
