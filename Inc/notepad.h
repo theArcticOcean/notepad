@@ -13,11 +13,13 @@
 #include "./Inc/xmlrecorder.h"
 #include "./Inc/charmap.h"
 #include <QTranslator>
+#include <QMutex>
+#include <map>
+using namespace std;
 
 class notePad : public QMainWindow
 {
     Q_OBJECT
-
     QMenuBar *menubar;
     QMenu *fileMenu;
     QMenu *editMenu;
@@ -51,6 +53,8 @@ public:
     void cryptMenuInit();
     void addMenus();
 
+    static QMutex mutexForRW;
+    static int encryptBytes;
 signals:    
     void changeFileName(QString str);
 
@@ -59,7 +63,7 @@ public slots:
 
     void actionDecrypt();
 
-    void deleteTab(int index);
+    void deleteTabAndFile(int index);
 
     void actionNew_triggered();
 

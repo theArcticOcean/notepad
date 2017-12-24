@@ -1,4 +1,5 @@
 #include "./Inc/xmlrecorder.h"
+#include "./Inc/log.h"
 #include <QDomComment>
 #include <QDomElement>
 #include <QTextEdit>
@@ -9,11 +10,12 @@
 #include <QXmlSimpleReader>
 #include <QDebug>
 #include <QtCore>
+#include "inc/commondata.h"
 
 xmlRecorder::xmlRecorder(QTabWidget *tabWidget)
 {
     this->tabWidget = tabWidget;
-    xmlPath = QCoreApplication::applicationDirPath()+"/backup/record.xml";
+    xmlPath = QCoreApplication::applicationDirPath()+"/"+RELATIVE_XML_PATH;
 }
 
 void xmlRecorder::writeXML()
@@ -22,7 +24,7 @@ void xmlRecorder::writeXML()
     QDomElement root = doc.createElement("root");
     doc.appendChild(root);
     qint8 tabs = tabWidget->count();
-    for(qint8 i=0;i<tabs;i++){
+    for(qint8 i=0; i<tabs; i++){
         QString name = tabWidget->tabText(i);
         QDomElement file = doc.createElement("file");
         file.setAttribute("name",name);
@@ -35,20 +37,21 @@ void xmlRecorder::writeXML()
        in<<doc.toString();
        recordFile.flush();
        recordFile.close();
-       qDebug()<<"finished.";
+       LOGDBG("%s","finished.");
    }
-    else qDebug()<<"file open failed.";
+    else LOGDBG("%s","file open failed.");
 }
 
 void xmlRecorder::readXML()
 {
     QFile file(xmlPath);
-    qDebug()<<xmlPath;
+    LOGDBG("%s",xmlPath.toStdString().c_str());
     QDomDocument doc;
     if(file.open(QIODevice::ReadOnly | QIODevice::Text)){
         doc.setContent(&file);
         QDomElement element = doc.documentElement();
-        qDebug()<<readNode(element);
+        std::string tmp = readNode(element).toStdString();
+        LOGDBG("%s",tmp.c_str());
         file.close();
     }
 }
@@ -73,7 +76,7 @@ QString xmlRecorder::readNode(QDomElement element)
             tabWidget->setCurrentWidget(text);
             file.close();
         }
-        else qDebug()<<"readnode file open failed:  "<<path;
+        else LOGDBG("%s%s","readnode file open failed:  ",path.toStdString().c_str());
     }
     return text;
 }

@@ -1,19 +1,42 @@
 #include "./Inc/notepad.h"
+#include "Inc/log.h"
+#include "Inc/commondata.h"
+#include "./Inc/handler.h"
 #include <QIcon>
 #include <QDebug>
 #include <QtCore>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QFontDialog>
-#include "./Inc/handler.h"
+#include <errno.h>
+#include <unistd.h>
+#include <string>
+#include <sys/stat.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <stdio.h>
 
+int notePad::encryptBytes = 0;
 notePad::notePad(QWidget *parent) : appPath(QCoreApplication::applicationDirPath()),
     QMainWindow(parent)
 {
+    LOGDBG("program start run!");
+    if(access(FOLDER_PATH,F_OK)){
+        if(0 != mkdir(FOLDER_PATH,0777)){
+            LOGDBG("%s create failed: %s",FOLDER_PATH,strerror(errno));
+        }
+    }
+    if(access(BACKUP_PATH,F_OK)){
+        if(0 != mkdir(BACKUP_PATH,0777)){
+            LOGDBG("%s create failed: %s",BACKUP_PATH,strerror(errno));
+        }
+    }
+
     finder = 0;
     replacer = 0;
+    encryptBytes = 0;
 
-    char_map = new charMap("./folder/.map");
+    char_map = new charMap(RELATIVE_MAP_FILE_PATH);
     menubar = new QMenuBar();
     timer = new QTimer();
     timer->setInterval(7000);
@@ -29,7 +52,11 @@ notePad::notePad(QWidget *parent) : appPath(QCoreApplication::applicationDirPath
     this->setMenuBar(menubar);
     tabwidget = new QTabWidget();
     tabwidget->setTabsClosable(true);
-    if(tabwidget->count()<=0){
+
+    recorder = new xmlRecorder(tabwidget);
+    recorder->readXML();
+
+    if(0 == tabwidget->count()){
         QTextEdit *text = new QTextEdit();
         text->setPlainText("");
 
@@ -38,18 +65,22 @@ notePad::notePad(QWidget *parent) : appPath(QCoreApplication::applicationDirPath
         tabwidget->addTab(text,*icon,fileName);
     }
     path = appPath+"/backup/"+tabwidget->tabText(tabwidget->currentIndex());
-
-    recorder = new xmlRecorder(tabwidget);
-    recorder->readXML();
+    QString qDir = appPath+"/backup";
+    std::string sDir = qDir.toStdString();
+    if(0 != access((char *)sDir.c_str(), F_OK)){
+        if(-1 == mkdir((char *)sDir.c_str(),0777)){
+            LOGDBG("folder %s create failed, error: %s", sDir.c_str(),strerror(errno));
+        }
+    }
 
     this->setCentralWidget(tabwidget);
-    QIcon icon;
-    icon.addFile(":/images/note.ico");
-    this->setWindowIcon(icon);
+//    QIcon icon;
+//    icon.addFile("logo.icns");
+//    this->setWindowIcon(icon);
     this->setGeometry(100,100,800,600);
     newCount = 0;
 
-    connect(tabwidget,SIGNAL(tabCloseRequested(int)),this,SLOT(deleteTab(int)));
+    connect(tabwidget,SIGNAL(tabCloseRequested(int)),this,SLOT(deleteTabAndFile(int)));
     connect(New,SIGNAL(triggered()),this,SLOT(actionNew_triggered()));
     connect(Open,SIGNAL(triggered()),this,SLOT(actionOpen_triggered()));
     connect(Save,SIGNAL(triggered()),this,SLOT(actionSave_triggered()));
@@ -153,30 +184,53 @@ void notePad::addMenus()
 
 void notePad::actionEncrypt()
 {
-    int i;
-    int key;
-    int value;
-    int bytes_number;
-    char *bytes;
-    QWidget *w;
-    QTextEdit *textEdit;
+    if(0 == encryptBytes)
+    {
+        int i;
+        int key;
+        int value;
+        int bytes_number;
+        FILE *fp;
+        int ret;
+        char *bytes;
+        QWidget *w;
+        QTextEdit *textEdit;
+        QString text;
 
-    timer->stop();
-    char_map->create_map();
-    w = tabwidget->currentWidget();
-    textEdit = static_cast<QTextEdit *>(w);
-    fileName = tabwidget->tabText(tabwidget->currentIndex());
-    path = appPath+"/backup/"+fileName;
+        bytes = NULL;
+        timer->stop();
+        char_map->create_map();
+        w = tabwidget->currentWidget();
+        textEdit = static_cast<QTextEdit *>(w);
+        fileName = tabwidget->tabText(tabwidget->currentIndex());
+        path = appPath+"/backup/"+fileName;
+        text = textEdit->toPlainText();
+        fp = fopen(path.toStdString().c_str(), "w"); //O_WRONLY | O_CREAT | O_TRUNC);
+        if(NULL == fp){
+            LOGDBG("%s open failed",path.toStdString().c_str());
+            return ;
+        }
+        ret = fwrite(text.toStdString().c_str(), 1, text.length(), fp);
+        if(ret <= 0){
+            LOGDBG("fwrite: %s",strerror(errno));
+        }
+        encryptBytes = text.length();
+        bytes = (char *)malloc(text.length());
 
-    bytes = bytesRead(path.toLatin1(),&bytes_number);
-    QMap<int,int> text_map = char_map->getMap();
-    for(i=0;i<bytes_number;i++){
-        key = bytes[i]+128;
-        value = text_map[key];
-        bytes[i] = value-128;
+        QMap<int,int> text_map = char_map->getMap();
+        for(i=0;i<text.length();i++){
+            key = bytes[i]+128;
+            value = text_map[key];
+            bytes[i] = value-128;
+        }
+        textEdit->setText(bytes);
+        if(NULL != bytes){
+            free(bytes);
+            bytes = NULL;
+        }
+        fclose(fp);
+        LOGDBG("save in %s: %s", path.toStdString().c_str(), text.toStdString().c_str());
     }
-    bytesWrite(path.toLatin1(),bytes,bytes_number);
-    textEdit->setPlainText(bytes);
 }
 /*
 QString::toLatin1() --> QByteArray
@@ -184,36 +238,61 @@ QByteArray --> QString
 */
 void notePad::actionDecrypt()
 {
-    int bytes_number;
-    char *bytes;
-    int i;
-    int key;
-    int value;
-    QWidget *w ;
-    QTextEdit *textEdit;
-    QString text;
+    if(encryptBytes > 0)
+    {
+        int bytes_number;
+        char *bytes;
+        FILE *fp;
+        int i;
+        int ret;
 
-    char_map->read_map();
-    w = tabwidget->currentWidget();
-    textEdit = static_cast<QTextEdit *>(w);
-    fileName = tabwidget->tabText(tabwidget->currentIndex());
-    path = appPath+"/backup/"+fileName;
-    bytes = bytesRead(path.toLatin1(),&bytes_number);
+        bytes = NULL;
+        QWidget *w ;
+        QTextEdit *textEdit;
+        QString text;
 
-    QMap<int,int> text_map = char_map->getMap();
-    for(i=0;i<bytes_number;i++){
-        value = bytes[i]+128;
-        key = text_map.key(value); //charMap.key(value);
-        bytes[i] = key-128;
+        char_map->read_map();
+        w = tabwidget->currentWidget();
+        textEdit = static_cast<QTextEdit *>(w);
+        fileName = tabwidget->tabText(tabwidget->currentIndex());
+        path = appPath+"/backup/"+fileName;
+        fp = fopen(path.toStdString().c_str(),"r");
+        if(NULL == fp){
+            LOGDBG("fopen failed: %s", strerror(errno));
+            return ;
+        }
+        if(encryptBytes <= 0){
+            LOGDBG("encryptBytes <= 0");
+        }
+        bytes = (char *)malloc(encryptBytes);
+        ret = fread(bytes,1,encryptBytes,fp);
+        if(ret <= 0){
+            LOGDBG("fread ret <= 0");
+        }
+        bytes[encryptBytes] = 0;
+        LOGDBG("====> %s",bytes);
+        textEdit->setText(bytes);
+        if(NULL != bytes){
+            free(bytes);
+            bytes = NULL;
+        }
+        fclose(fp);
+        actionSave_triggered();
+        timer->start();
+        encryptBytes = 0;
     }
-    bytesWrite(path.toLatin1(),bytes,bytes_number);
-    textEdit->setPlainText(bytes);
-    timer->start();
 }
 
-void notePad::deleteTab(int index)
+void notePad::deleteTabAndFile(int index)
 {
+    QString tabFile = tabwidget->tabText(index);
     tabwidget->removeTab(index);
+    std::string fileName = tabFile.toStdString();
+    int ret;
+    if(0 == access(fileName.c_str(),F_OK)){
+        ret = unlink(fileName.c_str());
+    }
+    LOGDBG("rm file %s result: %d", fileName.c_str(),ret);
 }
 
 void notePad::actionNew_triggered()
@@ -230,7 +309,6 @@ void notePad::actionNew_triggered()
     tabwidget->setCurrentWidget(text);
     QString label = QString("new &%1").arg(newCount);
     tabwidget->setTabText(newCount-1,label);
-    //qDebug()<<tabwidget->currentIndex();
 }
 
 void notePad::actionPaste_triggered()
@@ -283,37 +361,42 @@ void notePad::actionOpen_triggered()
 
 void notePad::actionSave_triggered()
 {
+    fileName = tabwidget->tabText(tabwidget->currentIndex());
+    path = appPath+"/backup/"+fileName;
     QFile file(path);
     if(file.open(QFile::ReadWrite | QFile::Text | QIODevice::Truncate)){
         QTextStream out(&file);
         QTextEdit *textEdit = (QTextEdit *)(tabwidget->currentWidget());
         out<<textEdit->toPlainText();
+        qDebug()<<textEdit->toPlainText();
         file.flush();
         file.close();
     }
-    else QMessageBox::warning(this,"warning","file save failed when try to writing open\n"+path);
+    else {
+        QMessageBox::warning(this,"warning","file save failed when try to writing open\n"+path);
+    }
 }
 
 void notePad::actionSave_as_triggered()
 {
-    path = QFileDialog::getSaveFileName(this,"save file");
+    QFileDialog dialog;
+    dialog.setWindowIcon(QIcon("image/logo.icns"));
+    path = dialog.getSaveFileName(this,"save file",QCoreApplication::applicationDirPath(),"*.*");
     if(!path.isEmpty()){
         fileName = baseName(path);
         int index = tabwidget->currentIndex();
         tabwidget->setTabText(index,fileName);
         actionSave_triggered();
     }
-    else QMessageBox::warning(this,"warning","file name is empty.");
+    LOGDBG("finished.");
 }
 
 void notePad::actionFind_triggered()
 {
     QTextEdit *textEdit = (QTextEdit *)tabwidget->currentWidget();
-    //qDebug()<<textEdit->document();
     finder = new textFind();
     finder->setTextEdit(textEdit);
     finder->show();
-    //highlighter.highlightBlock(textEdit->toPlainText());
 }
 
 void notePad::actionReplace_triggered()
@@ -345,23 +428,11 @@ void notePad::actionInitFont()
     textEdit->setTextColor(Qt::black);
 }
 
-//void notePad::actionPartFont()
-//{
-//    bool ok;
-//    QFont font = QFontDialog::getFont(
-//                    &ok, QFont("Sans",10,50,false), this);
-//    if (ok) {
-//        QWidget *w = tabwidget->currentWidget();
-//        QTextEdit *textEdit = static_cast<QTextEdit *>(w);
-//        textEdit->setCurrentFont(font);
-//    }
-//}
-
 void notePad::backup()
 {
     fileName = tabwidget->tabText(tabwidget->currentIndex());
     path = appPath+"/backup/"+fileName;
-    qDebug()<<"backup works: "<<path;
+    //LOGDBG("%s%s","backup works: ",path.toStdString().c_str());
     if(tabwidget->count()>0) actionSave_triggered();
 }
 

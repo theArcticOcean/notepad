@@ -1,4 +1,5 @@
 #include "./Inc/textreplace.h"
+#include "./Inc/log.h"
 #include <QMessageBox>
 #include "./Inc/regLighter.h"
 #include "./Inc/simlighter.h"
@@ -8,8 +9,10 @@
 textReplace::textReplace(QWidget *parent) :
     QWidget(parent)
 {
-    repLab = new QLabel ("replace: ");
-    arrowLab = new QLabel ("-->");
+    QString title;
+    title = normalTitle("replace: ");
+    repLab = new QLabel (title);
+    arrowLab = new QLabel (" ==> ");
     fromText = new QLineEdit();
     toText = new QLineEdit();
     hLayout1 = new QHBoxLayout();
@@ -18,20 +21,24 @@ textReplace::textReplace(QWidget *parent) :
     hLayout1->addWidget(arrowLab);
     hLayout1->addWidget(toText);
 
-    group1 = new QGroupBox("case sensitivity: ");
-    insensitive = new QRadioButton("insensitive",group1);
-    sensitive = new QRadioButton("sensitive",group1);
-//    insensitive->setGeometry(QRect(0,25,92,21));
-//    sensitive->setGeometry(QRect(0,55,92,21));
+//    group1 = new QGroupBox();
+//    insensitive = new QRadioButton("insensitive",group1);
+//    sensitive = new QRadioButton("sensitive",group1);
+    insensitive = new QRadioButton("insensitive");
+    sensitive = new QRadioButton("sensitive");
+    insensitive->setGeometry(QRect(0,25,92,21));
+    sensitive->setGeometry(QRect(0,55,92,21));
 
-    regexp = new QLabel("<font style=\"background:#DDDD00; color:#000000\" size=\"4\">regular expression replace:</font>");
+    title = normalTitle("regular expression replace:");
+    regexp = new QLabel(title);
     regAll = new QPushButton("replace all");
     spacer = new QSpacerItem(this->width()/3,21);
     hLayout2 = new QHBoxLayout();
     hLayout2->addWidget(regAll);
     hLayout2->addSpacerItem(spacer);
 
-    simple = new QLabel("<font style=\"background:#DDDD00; color:#000000\" size=\"4\">simple pattern replace:</font>");
+    title = normalTitle("simple pattern replace:");
+    simple = new QLabel(title);
     simRepThis = new QPushButton("replace this");
     simRepAll = new QPushButton("replace all");
     simNextOne = new QPushButton("skip");
@@ -45,16 +52,19 @@ textReplace::textReplace(QWidget *parent) :
     vLayout->addWidget(regexp);
     vLayout->addLayout(hLayout2);
     vLayout->addWidget(simple);
-    vLayout->addWidget(group1);
+    //vLayout->addWidget(group1);
     vLayout->addWidget(insensitive);
     vLayout->addWidget(sensitive);
     vLayout->addLayout(hLayout3);
 
-    this->setLayout(vLayout);
-    this->setWindowTitle("replace window");
     QIcon icon;
     icon.addFile(":/images/replace.ico");
+    this->setLayout(vLayout);
+    this->setWindowTitle("replace window");
     this->setWindowIcon(icon);
+    // to do: following doesn't work
+    this->setWindowFlags(windowFlags()& ~Qt::WindowMaximizeButtonHint); // maxBnt 按位取反
+    //this->setFixedSize(this->width(), this->height());
 
     charFormat = new QTextCharFormat();
     QColor color(100,0,100,100);
@@ -81,7 +91,7 @@ void textReplace::simSkip()
     QString from = fromText->text();
     if(from.isEmpty()){
         QMessageBox::warning(this,tr("attention"),\
-                             tr("please enter search words."),\
+                             tr("please enter replace words."),\
                              QMessageBox::Ok);
         return ;
     }
@@ -128,7 +138,7 @@ void textReplace::simRepAllFun()
     QString from = fromText->text();
     if(from.isEmpty()){
         QMessageBox::warning(this,tr("attention"),\
-                             tr("please enter search words."),\
+                             tr("please enter replace words."),\
                              QMessageBox::Ok);
         return ;
     }
@@ -165,13 +175,50 @@ void textReplace::simRepAllFun()
 
 void textReplace::simRepThisFun()
 {
-    QTextCursor textCursor = textEdit->textCursor();
+    QString from = fromText->text();
+    if(from.isEmpty()){
+        QMessageBox::warning(this,tr("attention"),\
+                             tr("please enter replace words."),\
+                             QMessageBox::Ok);
+        return ;
+    }
+
+    bool sensi = false;
+    if(sensitive->isChecked()) sensi = true;
+    else if(!insensitive->isChecked() && !sensitive->isChecked()){
+        QMessageBox::warning(this,tr("attention"),\
+                             tr("please choose case sensitivity"),\
+                             QMessageBox::Ok);
+        return ;
+    }
+
     QString to = toText->text();
-    textCursor.insertText(to);
+    QTextCursor textCursor = textEdit->textCursor();
+    if(sensi == false){
+        if(textEdit->find(from)){
+            textCursor = textEdit->textCursor();
+            // replace words
+            textCursor.insertText(to);
+        }
+    }
+    else {
+        if(textEdit->find(from,QTextDocument::FindCaseSensitively)){
+            textCursor = textEdit->textCursor();
+            textCursor.insertText(to);
+        }
+    }
 }
 
 void textReplace::regRepAll()
 {
+    QString from = fromText->text();
+    if(from.isEmpty()){
+        QMessageBox::warning(this,tr("attention"),\
+                             tr("please enter replace words."),\
+                             QMessageBox::Ok);
+        return ;
+    }
+
     QString newText = "";
     QTextEdit *curEdit = static_cast<QTextEdit *>(tabWidget->currentWidget());
     QString Text = curEdit->toPlainText();
@@ -186,7 +233,7 @@ void textReplace::regRepAll()
 
 void textReplace::closeEvent(QCloseEvent *event)
 {
-    qDebug()<<"close event";
+    LOGDBG("%s","close event");
     // we can make sure that pattern match nothing by the following way.
     QString pattern = textEdit->toPlainText()+"hahhahaha";
     regLighter *highlighter = new regLighter(textEdit->document(),pattern);
@@ -198,6 +245,14 @@ void textReplace::setTabWidget(QTabWidget *tabWidget)
     this->tabWidget = tabWidget;
 }
 
+QString textReplace::normalTitle(QString text)
+{
+    //    background:#DDDD00;  // the back color is yellow
+    QString str = "<font style=\"color:#000000\" size=\"4\">";
+    str = str+text;
+    str = str+"</font>";
+    return str;
+}
 void textReplace::setPattern()
 {
     pattern = fromText->text();

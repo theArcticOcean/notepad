@@ -27,14 +27,15 @@ public:
     void setTextEdit(QTextEdit *textEdit);
     void closeEvent(QCloseEvent *event);
     void setTabWidget(QTabWidget *tabWidget);
+    static QString normalTitle(QString text);
 
 private:
     QString pattern;
 
     QLabel *repLab, *arrowLab;
     QLineEdit *fromText, *toText;
-    QLabel *simple;
     QLabel *regexp;
+    QLabel *simple;
     QPushButton *regAll;
     QSpacerItem *spacer;
     QPushButton *simRepThis, *simRepAll;
@@ -44,7 +45,7 @@ private:
     QHBoxLayout *hLayout1;
     QHBoxLayout *hLayout2;
     QHBoxLayout *hLayout3;
-    QGroupBox *group1;
+    //QGroupBox *group1;
     QRadioButton *insensitive;
     QRadioButton *sensitive;
     QTextCharFormat *charFormat;

@@ -1,8 +1,7 @@
 QT       += core gui xml
-TRANSLATIONS += English.ts Chinese.ts
+ICON = image/logo.icns
 MOC_DIR = ./build/moc_cpp
 OBJECTS_DIR = ./build
-
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 HEADERS += \
@@ -13,7 +12,9 @@ HEADERS += \
     Inc/notepad.h \
     Inc/handler.h \
     Inc/charmap.h \
-    Inc/xmlrecorder.h
+    Inc/xmlrecorder.h \
+    Inc/log.h \
+    Inc/commondata.h
 
 SOURCES += \
     Src/xmlrecorder.cpp \
@@ -24,7 +25,10 @@ SOURCES += \
     Src/notepad.cpp \
     Src/main.cpp \
     Src/handler.cpp \
-    Src/charmap.cpp
+    Src/charmap.cpp \
+    Src/log.cpp
 
 RESOURCES += \
     image.qrc
+
+DISTFILES +=

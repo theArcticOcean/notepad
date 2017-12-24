@@ -1,10 +1,12 @@
 #include "./Inc/charmap.h"
+#include "./Inc/log.h"
 #include <stdlib.h>
 #include <time.h>
 #include <QFile>
 #include <QTextStream>
 #include <QDebug>
 #include <stdio.h>
+#include <unistd.h>
 
 charMap::charMap(char *str):filepath(str)
 {
@@ -19,23 +21,38 @@ int charMap::myRandom(int limit)
 
 void charMap::create_map()
 {
-    while(char_value_map.size() < limit+1){
-        int value = myRandom(limit);
-        value_move(value);
-    }
-    QFile file(filepath);
-    if(file.open(QIODevice::WriteOnly)){
-        QTextStream stream(&file);
-        for(QMap<int,int>::iterator it=char_value_map.begin();it!=char_value_map.end();it++){
-            stream<<it.key()<<" "<<it.value()<<'\n';
-            //qDebug()<<it.key()<<" "<<it.value();
+    if(0 != access(filepath,F_OK)){  // there is no encrypt code file.
+        while(char_value_map.size() < limit+1){
+            int value = myRandom(limit);
+            value_move(value);
         }
-        file.flush();
-        file.close();
-        qDebug()<<"create_map and file closed.";
+        QFile file(filepath);
+        if(file.open(QIODevice::WriteOnly)){
+            QTextStream stream(&file);
+            for(QMap<int,int>::iterator it=char_value_map.begin();it!=char_value_map.end();it++){
+                stream<<it.key()<<" "<<it.value()<<'\n';
+            }
+            file.flush();
+            file.close();
+            LOGDBG("%s: %s",filepath,"create_map and file closed.");
+        }
+        else {
+            LOGDBG("%s","file open failed.");
+        }
     }
     else {
-        qDebug()<<"file open failed.";
+        LOGDBG("read create_map file");
+        FILE *fp = fopen(filepath,"r");
+        if(NULL == fp){
+            LOGDBG("fopen %s failed.",filepath);
+            return ;
+        }
+        int key;
+        int value;
+        while(EOF != fscanf(fp,"%d %d",&key, &value)){
+            char_value_map[key] = value;
+        }
+        fclose(fp);
     }
 }
 
@@ -48,33 +65,7 @@ void charMap::read_map()
 
     while(fscanf(fp,"%d%d",&key,&value) != EOF){
         char_value_map[key] = value;
-        //printf("%d %d\n",key,value);
     }
-//    QFile file(filepath);
-//    qDebug()<<filepath;
-//    system("cat ./folder/.map");  /* test here */
-//    getchar();
-//    if(file.open(QIODevice::ReadOnly)){
-//        QTextStream in(&file);
-//        signed int value, key;
-//        while(!in.atEnd()){
-//            in>>key>>value;
-//            char_value_map[key] = value;
-//        }
-//        file.close();
-//    }
-//    else {
-//        qDebug()<<"read map file open failed.";
-//        return ;
-//    }
-
-//    QMapIterator<int,int> it(char_value_map);
-//    while(it.hasNext()){
-//        it.next();
-//        qDebug()<<it.key()<<" "<<it.value();
-//    }
-//    //system("cat ./map.txt");
-
 }
 
 void charMap::value_move(int value)
