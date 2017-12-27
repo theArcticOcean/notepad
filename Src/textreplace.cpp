@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include "./Inc/regLighter.h"
 #include "./Inc/simlighter.h"
+#include "Inc/commondata.h"
 #include <QRegExp>
 #include <QCoreApplication>
 
@@ -39,13 +40,13 @@ textReplace::textReplace(QWidget *parent) :
 
     title = normalTitle("simple pattern replace:");
     simple = new QLabel(title);
+    simNextOne = new QPushButton("skip");
     simRepThis = new QPushButton("replace this");
     simRepAll = new QPushButton("replace all");
-    simNextOne = new QPushButton("skip");
     hLayout3 = new QHBoxLayout();
+    hLayout3->addWidget(simNextOne);
     hLayout3->addWidget(simRepThis);
     hLayout3->addWidget(simRepAll);
-    hLayout3->addWidget(simNextOne);
 
     vLayout = new QVBoxLayout();
     vLayout->addLayout(hLayout1);
@@ -64,6 +65,7 @@ textReplace::textReplace(QWidget *parent) :
     this->setWindowIcon(icon);
     // to do: following doesn't work
     this->setWindowFlags(windowFlags()& ~Qt::WindowMaximizeButtonHint); // maxBnt 按位取反
+    this->setWindowIcon(QIcon(ICON_PATH));
     //this->setFixedSize(this->width(), this->height());
 
     charFormat = new QTextCharFormat();
@@ -115,9 +117,7 @@ void textReplace::simSkip()
             textCursor = textEdit->textCursor();
         }
         else {
-            QMessageBox::warning(this,tr("attention"),\
-                                 tr("not found, maybe words are in front of cursor !"),\
-                                 QMessageBox::Ok);
+            textEdit->moveCursor(QTextCursor::Start);
         }
     }
     else {
@@ -126,9 +126,7 @@ void textReplace::simSkip()
             textCursor = textEdit->textCursor();
         }
         else {
-            QMessageBox::warning(this,tr("attention"),\
-                                 tr("not found, maybe words are in front of cursor !"),\
-                                 QMessageBox::Ok);
+            textEdit->moveCursor(QTextCursor::Start);
         }
     }
 }
@@ -194,19 +192,8 @@ void textReplace::simRepThisFun()
 
     QString to = toText->text();
     QTextCursor textCursor = textEdit->textCursor();
-    if(sensi == false){
-        if(textEdit->find(from)){
-            textCursor = textEdit->textCursor();
-            // replace words
-            textCursor.insertText(to);
-        }
-    }
-    else {
-        if(textEdit->find(from,QTextDocument::FindCaseSensitively)){
-            textCursor = textEdit->textCursor();
-            textCursor.insertText(to);
-        }
-    }
+    textCursor.insertText(to);
+    LOGDBG("pos: %d",textCursor.position());
 }
 
 void textReplace::regRepAll()

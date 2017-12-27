@@ -15,26 +15,37 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <QtGlobal>
+#include <QDesktopServices>
+#include <QUrl>
 
-int notePad::encryptBytes = 0;
+unsigned int notePad::encryptBytes = 0;
+
 notePad::notePad(QWidget *parent) : appPath(QCoreApplication::applicationDirPath()),
     QMainWindow(parent)
 {
     LOGDBG("program start run!");
     if(access(FOLDER_PATH,F_OK)){
+#ifdef Q_OS_WIN
+        if(0 != mkdir(FOLDER_PATH)){
+#else
         if(0 != mkdir(FOLDER_PATH,0777)){
+#endif
             LOGDBG("%s create failed: %s",FOLDER_PATH,strerror(errno));
         }
     }
     if(access(BACKUP_PATH,F_OK)){
+#ifdef Q_OS_WIN
+        if(0 != mkdir(BACKUP_PATH)){
+#else
         if(0 != mkdir(BACKUP_PATH,0777)){
+#endif
             LOGDBG("%s create failed: %s",BACKUP_PATH,strerror(errno));
         }
     }
 
     finder = 0;
     replacer = 0;
-    encryptBytes = 0;
 
     char_map = new charMap(RELATIVE_MAP_FILE_PATH);
     menubar = new QMenuBar();
@@ -68,7 +79,12 @@ notePad::notePad(QWidget *parent) : appPath(QCoreApplication::applicationDirPath
     QString qDir = appPath+"/backup";
     std::string sDir = qDir.toStdString();
     if(0 != access((char *)sDir.c_str(), F_OK)){
+
+#ifdef Q_OS_WIN
+        if(0 != mkdir((char *)sDir.c_str())){
+#else
         if(-1 == mkdir((char *)sDir.c_str(),0777)){
+#endif
             LOGDBG("folder %s create failed, error: %s", sDir.c_str(),strerror(errno));
         }
     }
@@ -79,6 +95,7 @@ notePad::notePad(QWidget *parent) : appPath(QCoreApplication::applicationDirPath
 //    this->setWindowIcon(icon);
     this->setGeometry(100,100,800,600);
     newCount = 0;
+    this->setWindowIcon(QIcon(ICON_PATH));
 
     connect(tabwidget,SIGNAL(tabCloseRequested(int)),this,SLOT(deleteTabAndFile(int)));
     connect(New,SIGNAL(triggered()),this,SLOT(actionNew_triggered()));
@@ -91,11 +108,15 @@ notePad::notePad(QWidget *parent) : appPath(QCoreApplication::applicationDirPath
     connect(Undo,SIGNAL(triggered()),this,SLOT(actionUndo_triggered()));
     connect(Redo,SIGNAL(triggered()),this,SLOT(actionRedo_triggered()));
     connect(initFont,SIGNAL(triggered()),this,SLOT(actionInitFont()));
+    connect(increaseFontSize,SIGNAL(triggered(bool)),this,SLOT(actionFontIncreaseSize()));
+    connect(reduceFontSize,SIGNAL(triggered(bool)),this,SLOT(actionFontReduceSize()));
     connect(timer,SIGNAL(timeout()),this,SLOT(backup()));
     connect(find,SIGNAL(triggered()),this,SLOT(actionFind_triggered()));
     connect(replace,SIGNAL(triggered()),this,SLOT(actionReplace_triggered()));
-    connect(encrypt,SIGNAL(triggered()),this,SLOT(actionEncrypt()));
-    connect(decrypt,SIGNAL(triggered()),this,SLOT(actionDecrypt()));
+//    connect(encrypt,SIGNAL(triggered()),this,SLOT(actionEncrypt()));
+//    connect(decrypt,SIGNAL(triggered()),this,SLOT(actionDecrypt()));
+    connect(introduct,SIGNAL(triggered(bool)),this,SLOT(actionEncryptIntrodut()));
+    connect(help,SIGNAL(triggered(bool)),this,SLOT(actionHelp()));
 }
 
 void notePad::fileMenuInit()
@@ -138,6 +159,10 @@ void notePad::editMenuInit()
                                      "pointSize: 10, "
                                      "weight: 50, "
                                      "italic: false"));
+    increaseFontSize = new QAction("increase font size", this);
+    increaseFontSize->setShortcut(QKeySequence(tr("Ctrl+\+")));
+    reduceFontSize = new QAction("reduce font size", this);
+    reduceFontSize->setShortcut(QKeySequence(tr("Ctrl+\-")));
 
     editMenu->addAction(Copy);
     editMenu->addAction(Paste);
@@ -146,6 +171,8 @@ void notePad::editMenuInit()
     editMenu->addAction(Redo);
     editMenu->addAction(initFont);
     editMenu->setToolTipsVisible(true);
+    editMenu->addAction(increaseFontSize);
+    editMenu->addAction(reduceFontSize);
 }
 
 void notePad::findMenuInit()
@@ -163,15 +190,21 @@ void notePad::findMenuInit()
 
 void notePad::cryptMenuInit()
 {
-    cryptMenu = new QMenu("en/decrypt");
+    cryptMenu = new QMenu("info"); //("en/decrypt");
 
-    encrypt = new QAction("encrypt",this);
-    encrypt->setShortcut(QKeySequence(tr("Ctrl+E")));
-    decrypt = new QAction("decrypt",this);
-    decrypt->setShortcut(QKeySequence(tr("Ctrl+D")));
+//    encrypt = new QAction("encrypt",this);
+//    encrypt->setShortcut(QKeySequence(tr("Ctrl+E")));
+//    decrypt = new QAction("decrypt",this);
+//    decrypt->setShortcut(QKeySequence(tr("Ctrl+Shift+D")));
+    introduct = new QAction("introduction",this);
+    introduct->setShortcut(QKeySequence(tr("Ctrl+I")));
+    help = new QAction("help",this);
+    help->setShortcut(QKeySequence(tr("Ctrl+Shift+H")));
 
-    cryptMenu->addAction(encrypt);
-    cryptMenu->addAction(decrypt);
+    cryptMenu->addAction(introduct);
+    cryptMenu->addAction(help);
+//    cryptMenu->addAction(encrypt);
+//    cryptMenu->addAction(decrypt);
 }
 
 void notePad::addMenus()
@@ -181,56 +214,79 @@ void notePad::addMenus()
     menubar->addMenu(findMenu);
     menubar->addMenu(cryptMenu);
 }
+void notePad::actionEncryptIntrodut()
+{
+    QMessageBox msgBox;
+//    msgBox.setText("You need to know before using it:");
+//    msgBox.setInformativeText("Encrypt and Decrypt functions are just used to \
+//protect your English text which you are writing.\n\
+//Don't use it as a encrypt tool.");
+    msgBox.setText("about the product:");
+    msgBox.setInformativeText("\
+myNote is a simple note editor. It support:\n\
+1. basic edit functions.\n\
+2. find in simple way or regular expression way.\n\
+3. replace words in simple way or regular expression way.\n\
+4. keep a writing file backup at every 7 seconds.\n\
+5. choosing different tab by Alt + tabNumber.\n\
+6. increase or reduce font size for writing text.\n\n\
+The product has three diffrent versions which are mac, \n\
+window and Linux. Its version is 2.0\n\
+For more infomation, please visit http://weiy.org \n\
+Enjoy it!");
+    msgBox.setDefaultButton(QMessageBox::Ok);
+    int ret = msgBox.exec();
+}
+
+void notePad::actionHelp()
+{
+    QDesktopServices::openUrl(QUrl("http://weiy.org/2017/12/26/mynote-%E5%B8%AE%E5%8A%A9/"));
+}
 
 void notePad::actionEncrypt()
 {
-    if(0 == encryptBytes)
-    {
-        int i;
-        int key;
-        int value;
-        int bytes_number;
-        FILE *fp;
-        int ret;
-        char *bytes;
-        QWidget *w;
-        QTextEdit *textEdit;
-        QString text;
+    int i;
+    int key;
+    int value;
+    int bytes_number;
+    FILE *fp;
+    int ret;
+    char *bytes;
+    QWidget *w;
+    QTextEdit *textEdit;
+    QString text;
 
-        bytes = NULL;
-        timer->stop();
-        char_map->create_map();
-        w = tabwidget->currentWidget();
-        textEdit = static_cast<QTextEdit *>(w);
-        fileName = tabwidget->tabText(tabwidget->currentIndex());
-        path = appPath+"/backup/"+fileName;
-        text = textEdit->toPlainText();
-        fp = fopen(path.toStdString().c_str(), "w"); //O_WRONLY | O_CREAT | O_TRUNC);
-        if(NULL == fp){
-            LOGDBG("%s open failed",path.toStdString().c_str());
-            return ;
-        }
-        ret = fwrite(text.toStdString().c_str(), 1, text.length(), fp);
-        if(ret <= 0){
-            LOGDBG("fwrite: %s",strerror(errno));
-        }
-        encryptBytes = text.length();
-        bytes = (char *)malloc(text.length());
-
-        QMap<int,int> text_map = char_map->getMap();
-        for(i=0;i<text.length();i++){
-            key = bytes[i]+128;
-            value = text_map[key];
-            bytes[i] = value-128;
-        }
-        textEdit->setText(bytes);
-        if(NULL != bytes){
-            free(bytes);
-            bytes = NULL;
-        }
-        fclose(fp);
-        LOGDBG("save in %s: %s", path.toStdString().c_str(), text.toStdString().c_str());
+    bytes = NULL;
+    timer->stop();
+    char_map->create_map();
+    w = tabwidget->currentWidget();
+    textEdit = static_cast<QTextEdit *>(w);
+    fileName = tabwidget->tabText(tabwidget->currentIndex());
+    path = appPath+"/backup/"+fileName;
+    text = textEdit->toPlainText();
+    fp = fopen(path.toStdString().c_str(), "w"); //O_WRONLY | O_CREAT | O_TRUNC);
+    if(NULL == fp){
+        LOGDBG("%s open failed",path.toStdString().c_str());
+        return ;
     }
+    bytes = (char *)malloc(text.length()+1);
+    memcpy(bytes, text.toStdString().c_str(), text.length());
+    bytes[text.length()] = 0;
+    QMap<int,int> text_map = char_map->getMap();
+    for(i=0;i<text.length();i++){
+        key = bytes[i]+128;
+        value = text_map[key];
+        bytes[i] = value-128;
+    }
+    textEdit->setText(bytes);
+    ret = fwrite(bytes, 1, text.length()+1, fp);
+    encryptBytes = text.length()+1;
+    LOGDBG("save : %s", bytes);
+    if(NULL != bytes){
+        free(bytes);
+        bytes = NULL;
+    }
+    fclose(fp);
 }
 /*
 QString::toLatin1() --> QByteArray
@@ -238,49 +294,59 @@ QByteArray --> QString
 */
 void notePad::actionDecrypt()
 {
-    if(encryptBytes > 0)
-    {
-        int bytes_number;
-        char *bytes;
-        FILE *fp;
-        int i;
-        int ret;
+    int bytes_number;
+    char *bytes;
+    FILE *fp;
+    int i;
+    int ret;
+    QWidget *w ;
+    QTextEdit *textEdit;
+    QString text;
 
-        bytes = NULL;
-        QWidget *w ;
-        QTextEdit *textEdit;
-        QString text;
-
-        char_map->read_map();
-        w = tabwidget->currentWidget();
-        textEdit = static_cast<QTextEdit *>(w);
-        fileName = tabwidget->tabText(tabwidget->currentIndex());
-        path = appPath+"/backup/"+fileName;
-        fp = fopen(path.toStdString().c_str(),"r");
-        if(NULL == fp){
-            LOGDBG("fopen failed: %s", strerror(errno));
-            return ;
-        }
-        if(encryptBytes <= 0){
-            LOGDBG("encryptBytes <= 0");
-        }
-        bytes = (char *)malloc(encryptBytes);
-        ret = fread(bytes,1,encryptBytes,fp);
-        if(ret <= 0){
-            LOGDBG("fread ret <= 0");
-        }
-        bytes[encryptBytes] = 0;
-        LOGDBG("====> %s",bytes);
-        textEdit->setText(bytes);
-        if(NULL != bytes){
-            free(bytes);
-            bytes = NULL;
-        }
-        fclose(fp);
-        actionSave_triggered();
-        timer->start();
-        encryptBytes = 0;
+    bytes = NULL;
+    if(char_map == NULL || tabwidget == NULL){
+        LOGDBG("params are illegal");
+        return;
     }
+    char_map->read_map();
+    w = tabwidget->currentWidget();
+    textEdit = static_cast<QTextEdit *>(w);
+    fileName = tabwidget->tabText(tabwidget->currentIndex());
+    path = appPath+"/backup/"+fileName;
+    fp = fopen(path.toStdString().c_str(),"r");
+    if(NULL == fp){
+        LOGDBG("fopen failed: %s", strerror(errno));
+        return ;
+    }
+    bytes = (char *)malloc(encryptBytes);
+    if(NULL == bytes){
+        LOGDBG("bytes is NULL");
+        return ;
+    }
+    ret = fread(bytes,1,encryptBytes,fp);
+    if(ret <= 0){
+        LOGDBG("fread ret <= 0, %s",strerror(errno));
+        free(bytes);
+        bytes = NULL;
+        return ;
+    }
+    LOGDBG("read: %s",bytes);
+    QMap<int,int> myMap = char_map->getMap();
+    for(i=0; i<encryptBytes-1; i++){
+        int value = bytes[i]+128;
+        int key = myMap.key(value);
+        bytes[i] = key-128;
+    }
+    bytes[encryptBytes] = 0;
+    textEdit->setText(bytes);
+
+    if(NULL != bytes){
+        free(bytes);
+        bytes = NULL;
+    }
+    fclose(fp);
+    actionSave_triggered();
+    timer->start();
 }
 
 void notePad::deleteTabAndFile(int index)
@@ -361,8 +427,6 @@ void notePad::actionOpen_triggered()
 
 void notePad::actionSave_triggered()
 {
-    fileName = tabwidget->tabText(tabwidget->currentIndex());
-    path = appPath+"/backup/"+fileName;
     QFile file(path);
     if(file.open(QFile::ReadWrite | QFile::Text | QIODevice::Truncate)){
         QTextStream out(&file);
@@ -426,6 +490,28 @@ void notePad::actionInitFont()
     textEdit->selectAll();
     textEdit->setCurrentFont(f);
     textEdit->setTextColor(Qt::black);
+}
+
+void notePad::actionFontIncreaseSize()
+{
+    QWidget *w = tabwidget->currentWidget();
+    QTextEdit *textEdit = static_cast<QTextEdit *>(w);
+    QFont font = textEdit->currentFont();
+    font.setPointSize(font.pointSize()+2);
+    textEdit->setCurrentFont(font);
+    QString text = textEdit->toPlainText();
+    textEdit->setText(text);
+}
+
+void notePad::actionFontReduceSize()
+{
+    QWidget *w = tabwidget->currentWidget();
+    QTextEdit *textEdit = static_cast<QTextEdit *>(w);
+    QFont font = textEdit->currentFont();
+    font.setPointSize(font.pointSize()-2);
+    textEdit->setCurrentFont(font);
+    QString text = textEdit->toPlainText();
+    textEdit->setText(text);
 }
 
 void notePad::backup()

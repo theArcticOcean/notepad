@@ -7,6 +7,7 @@
 #include <QTabWidget>
 #include <QTextEdit>
 #include <QTimer>
+#include <QIcon>
 #include "./Inc/textfind.h"
 #include "./Inc/textreplace.h"
 #include "./Inc/regLighter.h"
@@ -29,9 +30,9 @@ class notePad : public QMainWindow
     QAction *New, *Open, *Save, *Save_as;
     QAction *Copy,*Paste,*Cut,*Undo,*Redo;
     QAction *find, *replace;
-    QAction *initFont;                  // *partFont;
-    QAction *encrypt;
-    QAction *decrypt;
+    QAction *initFont, *increaseFontSize, *reduceFontSize;
+    //QAction *encrypt, *decrypt
+    QAction *introduct, *help;
     QTabWidget *tabwidget;
     charMap *char_map;
 
@@ -54,14 +55,19 @@ public:
     void addMenus();
 
     static QMutex mutexForRW;
-    static int encryptBytes;
+    static unsigned int encryptBytes;
+
 signals:    
     void changeFileName(QString str);
 
 public slots:
     void actionEncrypt();
 
+    void actionHelp();
+
     void actionDecrypt();
+
+    void actionEncryptIntrodut();
 
     void deleteTabAndFile(int index);
 
@@ -88,6 +94,10 @@ public slots:
     void actionReplace_triggered();
 
     void actionInitFont();
+
+    void actionFontIncreaseSize();
+
+    void actionFontReduceSize();
 
     //void actionPartFont();
 

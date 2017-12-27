@@ -6,7 +6,6 @@ class charMap
 {
     QMap<int,int> char_value_map;
     int limit;
-
 public:
     const char *filepath;
 

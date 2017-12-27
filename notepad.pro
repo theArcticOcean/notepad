@@ -1,5 +1,17 @@
 QT       += core gui xml
-ICON = image/logo.icns
+
+macx{
+    message("compile for mac os x")
+    ICON = image/logo.icns
+}
+
+win32{
+    message("compile for windows")
+    RC_FILE = res.rc
+}
+
+TARGET = myNote
+VERSION = 1.0
 MOC_DIR = ./build/moc_cpp
 OBJECTS_DIR = ./build
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets

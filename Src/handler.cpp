@@ -49,7 +49,11 @@ void bytesWrite(const char *path, const char *bytes, const int byte_number)
 {
     notePad::mutexForRW.lock();
     int ret;
+#ifdef Q_OS_LINUX
+    int fd = open(path,O_WRONLY | O_CREAT | O_TRUNC, 0666);
+#else
     int fd = open(path,O_WRONLY | O_CREAT | O_TRUNC);
+#endif
     if(fd == NULL){
         LOGDBG("fopen failed.");
         return ;

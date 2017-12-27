@@ -6,6 +6,8 @@
 #include <QTextStream>
 #include <QDebug>
 #include <stdio.h>
+#include <string.h>
+#include <errno.h>
 #include <unistd.h>
 
 charMap::charMap(char *str):filepath(str)
@@ -16,7 +18,11 @@ charMap::charMap(char *str):filepath(str)
 
 int charMap::myRandom(int limit)
 {
+#ifdef Q_OS_WIN
+    return int((double)rand()/RAND_MAX*limit+0.5);
+#else
     return int((double)random()/RAND_MAX*limit+0.5);
+#endif
 }
 
 void charMap::create_map()
@@ -60,12 +66,16 @@ void charMap::read_map()
 {
     char_value_map.clear();
     FILE *fp = fopen(filepath,"r");
+    if(NULL == fp){
+        LOGDBG("fopen %s failed: %s", strerror(errno));
+        return ;
+    }
     int key;
     int value;
-
     while(fscanf(fp,"%d%d",&key,&value) != EOF){
         char_value_map[key] = value;
     }
+    fclose(fp);
 }
 
 void charMap::value_move(int value)

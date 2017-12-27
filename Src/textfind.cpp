@@ -2,6 +2,7 @@
 #include "./Inc/regLighter.h"
 #include "./Inc/simlighter.h"
 #include "./Inc/log.h"
+#include "Inc/commondata.h"
 #include <QTextCharFormat>
 #include <QColor>
 #include <QMessageBox>
@@ -35,6 +36,7 @@ textFind::textFind(QWidget *parent):
     this->resize(400,180);
     this->setLayout(vLayout);
     this->setWindowTitle("find window");
+    this->setWindowIcon(QIcon(ICON_PATH));
 
     connect(findButton,SIGNAL(clicked()),this,SLOT(setPattern()));
 }

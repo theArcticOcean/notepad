@@ -6,5 +6,6 @@
 #define RELATIVE_MAP_FILE_PATH          "./folder/.map"
 #define RELATIVE_ENCRYPTED_FILE_PATH    "./folder/.encrypted"
 #define RELATIVE_XML_PATH               "./backup/record.xml"
+#define ICON_PATH                       "image/logo.ico"
 #define ENCRYPT_KEY_WORDS               "????"
 #endif // COMMONDATA_H
