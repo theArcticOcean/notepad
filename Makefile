@@ -693,6 +693,7 @@ compiler_rcc_clean:
 	-$(DEL_FILE) qrc_image.cpp
 qrc_image.cpp: image.qrc \
 		../../Qt5.9.2/5.9.2/clang_64/bin/rcc \
+		image/logo.ico \
 		image/replace.ico \
 		image/find.ico \
 		image/note.ico \

@@ -197,7 +197,7 @@ void notePad::cryptMenuInit()
 //    decrypt = new QAction("decrypt",this);
 //    decrypt->setShortcut(QKeySequence(tr("Ctrl+Shift+D")));
     introduct = new QAction("introduction",this);
-    introduct->setShortcut(QKeySequence(tr("Ctrl+I")));
+    introduct->setShortcut(QKeySequence(tr("Ctrl+Shift+I")));
     help = new QAction("help",this);
     help->setShortcut(QKeySequence(tr("Ctrl+Shift+H")));
 
@@ -235,7 +235,8 @@ window and Linux. Its version is 2.0\n\
 For more infomation, please visit http://weiy.org \n\
 Enjoy it!");
     msgBox.setDefaultButton(QMessageBox::Ok);
-    int ret = msgBox.exec();
+    msgBox.setWindowIcon(QIcon(ICON_PATH));
+    msgBox.exec();
 }
 
 void notePad::actionHelp()
