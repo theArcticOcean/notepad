@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>new.png</file>
+        <file>find.ico</file>
+        <file>note.ico</file>
+        <file>replace.ico</file>
+    </qresource>
+</RCC>

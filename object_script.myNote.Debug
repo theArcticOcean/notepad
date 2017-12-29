@@ -1,0 +1,16 @@
+INPUT(
+./build\xmlrecorder.o
+./build\textreplace.o
+./build\textfind.o
+./build\simlighter.o
+./build\regLighter.o
+./build\notepad.o
+./build\main.o
+./build\handler.o
+./build\charmap.o
+./build\log.o
+./build\qrc_image.o
+./build\moc_textreplace.o
+./build\moc_textfind.o
+./build\moc_notepad.o
+);
