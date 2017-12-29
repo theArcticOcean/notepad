@@ -1,9 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>image/find.ico</file>
-        <file>image/new.png</file>
-        <file>image/note.ico</file>
-        <file>image/replace.ico</file>
-        <file>image/logo.ico</file>
-    </qresource>
-</RCC>
