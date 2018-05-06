@@ -1,3 +1,4 @@
+
 #include "./Inc/textreplace.h"
 #include "./Inc/log.h"
 #include <QMessageBox>
@@ -217,7 +218,6 @@ void textReplace::regRepAll()
     curEdit->setPlainText(newText);
 }
 
-
 void textReplace::closeEvent(QCloseEvent *event)
 {
     LOGDBG("%s","close event");
@@ -240,6 +240,7 @@ QString textReplace::normalTitle(QString text)
     str = str+"</font>";
     return str;
 }
+
 void textReplace::setPattern()
 {
     pattern = fromText->text();

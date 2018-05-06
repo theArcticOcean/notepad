@@ -90,10 +90,8 @@ notePad::notePad(QWidget *parent) : appPath(QCoreApplication::applicationDirPath
     }
 
     this->setCentralWidget(tabwidget);
-//    QIcon icon;
-//    icon.addFile("logo.icns");
-//    this->setWindowIcon(icon);
     this->setGeometry(100,100,800,600);
+
     newCount = 0;
     this->setWindowIcon(QIcon(ICON_PATH));
 
@@ -481,16 +479,22 @@ void notePad::actionInitFont()
 {
     QWidget *w = tabwidget->currentWidget();
     QTextEdit *textEdit = static_cast<QTextEdit *>(w);
+
     QString text = textEdit->toPlainText();
-    textEdit->setText(text);
+    textEdit->setText("");
+
     QFont f;
     f.setPixelSize(-1);
-    f.setFamily("Sans");
-    f.setPointSize(10);
+    f.setPointSize(13);
     f.setWeight(50);
+    f.setStyle(QFont::StyleNormal);
+    f.setFamily(".SF NS Text");
+    f.setBold(false);
+
     textEdit->selectAll();
     textEdit->setCurrentFont(f);
     textEdit->setTextColor(Qt::black);
+    textEdit->setText(text);
 }
 
 void notePad::actionFontIncreaseSize()
