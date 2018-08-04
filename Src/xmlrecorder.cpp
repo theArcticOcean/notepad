@@ -10,7 +10,7 @@
 #include <QXmlSimpleReader>
 #include <QDebug>
 #include <QtCore>
-#include "inc/commondata.h"
+#include "Inc/commondata.h"
 
 xmlRecorder::xmlRecorder(QTabWidget *tabWidget)
 {

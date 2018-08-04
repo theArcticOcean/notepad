@@ -16,6 +16,7 @@
 #include <QTextCursor>
 #include <QTextCharFormat>
 #include <QTabWidget>
+#include "Inc/simlighter.h"
 
 class textReplace : public QWidget
 {
@@ -23,6 +24,7 @@ class textReplace : public QWidget
 
 public:
     explicit textReplace(QWidget *parent = 0);
+    ~textReplace();
     QString getPattern();
     void setTextEdit(QTextEdit *textEdit);
     void closeEvent(QCloseEvent *event);
@@ -45,13 +47,14 @@ private:
     QHBoxLayout *hLayout1;
     QHBoxLayout *hLayout2;
     QHBoxLayout *hLayout3;
-    //QGroupBox *group1;
     QRadioButton *insensitive;
     QRadioButton *sensitive;
     QTextCharFormat *charFormat;
 
     QTextEdit *textEdit;
     QTabWidget *tabWidget;
+    bool simRepFound;
+    simLighter *highlighter;
 
 signals:
 

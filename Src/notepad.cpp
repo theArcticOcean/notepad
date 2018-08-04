@@ -21,8 +21,9 @@
 
 unsigned int notePad::encryptBytes = 0;
 
-notePad::notePad(QWidget *parent) : appPath(QCoreApplication::applicationDirPath()),
-    QMainWindow(parent)
+notePad::notePad(QWidget *parent)
+    : QMainWindow(parent)
+    , appPath(QCoreApplication::applicationDirPath())
 {
     LOGDBG("program start run!");
     if(access(FOLDER_PATH,F_OK)){
@@ -44,10 +45,10 @@ notePad::notePad(QWidget *parent) : appPath(QCoreApplication::applicationDirPath
         }
     }
 
-    finder = 0;
-    replacer = 0;
-
-    char_map = new charMap(RELATIVE_MAP_FILE_PATH);
+    finder = NULL;
+    replacer = NULL;
+    //QString tmp = RELATIVE_MAP_FILE_PATH;
+    char_map = new charMap( RELATIVE_MAP_FILE_PATH );
     menubar = new QMenuBar();
     timer = new QTimer();
     timer->setInterval(7000);
@@ -69,6 +70,7 @@ notePad::notePad(QWidget *parent) : appPath(QCoreApplication::applicationDirPath
 
     if(0 == tabwidget->count()){
         QTextEdit *text = new QTextEdit();
+        text->setTabChangesFocus( true );
         text->setPlainText("");
 
         QIcon *icon = new QIcon(":/images/new.png");
@@ -158,9 +160,9 @@ void notePad::editMenuInit()
                                      "weight: 50, "
                                      "italic: false"));
     increaseFontSize = new QAction("increase font size", this);
-    increaseFontSize->setShortcut(QKeySequence(tr("Ctrl+\+")));
+    increaseFontSize->setShortcut(QKeySequence(tr("Ctrl + +")));
     reduceFontSize = new QAction("reduce font size", this);
-    reduceFontSize->setShortcut(QKeySequence(tr("Ctrl+\-")));
+    reduceFontSize->setShortcut(QKeySequence(tr("Ctrl + -")));
 
     editMenu->addAction(Copy);
     editMenu->addAction(Paste);
@@ -247,7 +249,6 @@ void notePad::actionEncrypt()
     int i;
     int key;
     int value;
-    int bytes_number;
     FILE *fp;
     int ret;
     char *bytes;
@@ -293,10 +294,9 @@ QByteArray --> QString
 */
 void notePad::actionDecrypt()
 {
-    int bytes_number;
     char *bytes;
     FILE *fp;
-    int i;
+    unsigned int i;
     int ret;
     QWidget *w ;
     QTextEdit *textEdit;
@@ -331,7 +331,7 @@ void notePad::actionDecrypt()
     }
     LOGDBG("read: %s",bytes);
     QMap<int,int> myMap = char_map->getMap();
-    for(i=0; i<encryptBytes-1; i++){
+    for( i = 0; i < encryptBytes - 1; ++i ){
         int value = bytes[i]+128;
         int key = myMap.key(value);
         bytes[i] = key-128;
@@ -353,8 +353,9 @@ void notePad::deleteTabAndFile(int index)
     QString tabFile = tabwidget->tabText(index);
     tabwidget->removeTab(index);
     std::string fileName = tabFile.toStdString();
-    int ret;
-    if(0 == access(fileName.c_str(),F_OK)){
+    int ret = -9999;
+    if( 0 == access( fileName.c_str(), F_OK ) )
+    {
         ret = unlink(fileName.c_str());
     }
     LOGDBG("rm file %s result: %d", fileName.c_str(),ret);
@@ -465,7 +466,10 @@ void notePad::actionFind_triggered()
 void notePad::actionReplace_triggered()
 {
     QTextEdit *textEdit = (QTextEdit *)tabwidget->currentWidget();
-    replacer = new textReplace();
+    if( NULL == replacer )
+    {
+        replacer = new textReplace();
+    }
     replacer->setTabWidget(tabwidget);
     replacer->setTextEdit(textEdit);
     // forbid maximize when click father widget.

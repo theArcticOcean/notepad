@@ -8,11 +8,13 @@
 #include <QRegExp>
 #include <QCoreApplication>
 
-textReplace::textReplace(QWidget *parent) :
-    QWidget(parent)
+textReplace::textReplace(QWidget *parent)
+    : QWidget(parent)
+    , highlighter ( NULL )
 {
     QString title;
     title = normalTitle("replace: ");
+    simRepFound = false;
     repLab = new QLabel (title);
     arrowLab = new QLabel (" ==> ");
     fromText = new QLineEdit();
@@ -23,9 +25,6 @@ textReplace::textReplace(QWidget *parent) :
     hLayout1->addWidget(arrowLab);
     hLayout1->addWidget(toText);
 
-//    group1 = new QGroupBox();
-//    insensitive = new QRadioButton("insensitive",group1);
-//    sensitive = new QRadioButton("sensitive",group1);
     insensitive = new QRadioButton("insensitive");
     sensitive = new QRadioButton("sensitive");
     insensitive->setGeometry(QRect(0,25,92,21));
@@ -54,7 +53,6 @@ textReplace::textReplace(QWidget *parent) :
     vLayout->addWidget(regexp);
     vLayout->addLayout(hLayout2);
     vLayout->addWidget(simple);
-    //vLayout->addWidget(group1);
     vLayout->addWidget(insensitive);
     vLayout->addWidget(sensitive);
     vLayout->addLayout(hLayout3);
@@ -63,11 +61,8 @@ textReplace::textReplace(QWidget *parent) :
     icon.addFile(":/images/replace.ico");
     this->setLayout(vLayout);
     this->setWindowTitle("replace window");
-    this->setWindowIcon(icon);
-    // to do: following doesn't work
     this->setWindowFlags(windowFlags()& ~Qt::WindowMaximizeButtonHint); // maxBnt 按位取反
     this->setWindowIcon(QIcon(ICON_PATH));
-    //this->setFixedSize(this->width(), this->height());
 
     charFormat = new QTextCharFormat();
     QColor color(100,0,100,100);
@@ -77,6 +72,11 @@ textReplace::textReplace(QWidget *parent) :
     connect(simRepAll,SIGNAL(clicked()),this,SLOT(simRepAllFun()));
     connect(simNextOne,SIGNAL(clicked()),this,SLOT(simSkip()));
     connect(regAll,SIGNAL(clicked()),this,SLOT(regRepAll()));
+}
+
+textReplace::~textReplace()
+{
+    LOGDBG( "~ textReplace ~" );
 }
 
 QString textReplace::getPattern()
@@ -98,7 +98,7 @@ void textReplace::simSkip()
                              QMessageBox::Ok);
         return ;
     }
-    simLighter *highlighter = new simLighter(textEdit->document(),from);
+    highlighter = new simLighter(textEdit->document(),from);
 
     QString to = toText->text();
     bool sensi = false;
@@ -116,6 +116,7 @@ void textReplace::simSkip()
         if(textEdit->find(from)){
             // the following sentence can make words which marched highlight
             textCursor = textEdit->textCursor();
+            simRepFound = true;
         }
         else {
             textEdit->moveCursor(QTextCursor::Start);
@@ -125,6 +126,7 @@ void textReplace::simSkip()
         if(textEdit->find(from,QTextDocument::FindCaseSensitively)){
             // the following sentence can make words which marched highlight
             textCursor = textEdit->textCursor();
+            simRepFound = true;
         }
         else {
             textEdit->moveCursor(QTextCursor::Start);
@@ -141,7 +143,7 @@ void textReplace::simRepAllFun()
                              QMessageBox::Ok);
         return ;
     }
-    simLighter *highlighter = new simLighter(textEdit->document(),from);
+    highlighter = new simLighter(textEdit->document(),from);
 
     QString to = toText->text();
     bool sensi = false;
@@ -193,7 +195,11 @@ void textReplace::simRepThisFun()
 
     QString to = toText->text();
     QTextCursor textCursor = textEdit->textCursor();
-    textCursor.insertText(to);
+    if( simRepFound )
+    {
+        textCursor.insertText(to);
+        simRepFound = false;
+    }
     LOGDBG("pos: %d",textCursor.position());
 }
 
@@ -223,7 +229,12 @@ void textReplace::closeEvent(QCloseEvent *event)
     LOGDBG("%s","close event");
     // we can make sure that pattern match nothing by the following way.
     QString pattern = textEdit->toPlainText()+"hahhahaha";
-    regLighter *highlighter = new regLighter(textEdit->document(),pattern);
+    highlighter = new simLighter(textEdit->document(), pattern);
+    if( NULL != highlighter )
+    {
+        delete highlighter;
+        highlighter = NULL;
+    }
     QWidget::closeEvent(event);
 }
 
