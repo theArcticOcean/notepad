@@ -8,14 +8,17 @@
 #include <QTextEdit>
 #include <QTimer>
 #include <QIcon>
-#include "./Inc/textfind.h"
-#include "./Inc/textreplace.h"
-#include "./Inc/regLighter.h"
-#include "./Inc/xmlrecorder.h"
-#include "./Inc/charmap.h"
 #include <QTranslator>
 #include <QMutex>
 #include <map>
+#include <QSharedPointer>
+
+#include "textfind.h"
+#include "textreplace.h"
+#include "regLighter.h"
+#include "xmlrecorder.h"
+#include "charmap.h"
+
 using namespace std;
 
 class notePad : public QMainWindow
@@ -42,7 +45,7 @@ class notePad : public QMainWindow
     QString path;
     QString fileName;
     textFind *finder;
-    textReplace *replacer;
+    QSharedPointer<textReplace> replacer;
     regLighter *highlighter;
     xmlRecorder *recorder;
 

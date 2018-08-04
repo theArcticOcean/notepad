@@ -16,7 +16,9 @@
 #include <QTextCursor>
 #include <QTextCharFormat>
 #include <QTabWidget>
-#include "Inc/simlighter.h"
+#include <QSharedPointer>
+
+#include "simlighter.h"
 
 class textReplace : public QWidget
 {
@@ -29,32 +31,29 @@ public:
     void setTextEdit(QTextEdit *textEdit);
     void closeEvent(QCloseEvent *event);
     void setTabWidget(QTabWidget *tabWidget);
-    static QString normalTitle(QString text);
+    QString normalTitle(QString text);
 
 private:
     QString pattern;
 
-    QLabel *repLab, *arrowLab;
-    QLineEdit *fromText, *toText;
-    QLabel *regexp;
-    QLabel *simple;
-    QPushButton *regAll;
-    QSpacerItem *spacer;
-    QPushButton *simRepThis, *simRepAll;
-    QPushButton *simNextOne;
+    QSharedPointer<QLabel> repLab, arrowLab;
+    QSharedPointer<QLineEdit> fromText, toText;
+    QSharedPointer<QLabel> regexp;
+    QSharedPointer<QLabel> simple;
+    QSharedPointer<QPushButton> regAll;
+    QSharedPointer<QPushButton> simRepThis, simRepAll;
+    QSharedPointer<QPushButton> simNextOne;
+    QSpacerItem *spacer;        // add it to layout, layout would delete it.
 
-    QVBoxLayout *vLayout;
-    QHBoxLayout *hLayout1;
-    QHBoxLayout *hLayout2;
-    QHBoxLayout *hLayout3;
-    QRadioButton *insensitive;
-    QRadioButton *sensitive;
-    QTextCharFormat *charFormat;
+    QSharedPointer<QVBoxLayout> vLayout;
+    QSharedPointer<QHBoxLayout> hLayout1, hLayout2, hLayout3;
+    QSharedPointer<QRadioButton> insensitive, sensitive;
+    QSharedPointer<QTextCharFormat> charFormat;
 
-    QTextEdit *textEdit;
-    QTabWidget *tabWidget;
+    QTextEdit* textEdit;
+    QTabWidget* tabWidget;
+    QSharedPointer<simLighter> highlighter;
     bool simRepFound;
-    simLighter *highlighter;
 
 signals:
 

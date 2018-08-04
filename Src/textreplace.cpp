@@ -1,82 +1,87 @@
-
-#include "./Inc/textreplace.h"
-#include "./Inc/log.h"
 #include <QMessageBox>
-#include "./Inc/regLighter.h"
-#include "./Inc/simlighter.h"
-#include "Inc/commondata.h"
 #include <QRegExp>
 #include <QCoreApplication>
 
+#include "textreplace.h"
+#include "log.h"
+#include "regLighter.h"
+#include "simlighter.h"
+#include "commondata.h"
+
 textReplace::textReplace(QWidget *parent)
     : QWidget(parent)
-    , highlighter ( NULL )
+    , textEdit( NULL )
+    , tabWidget( NULL )
 {
     QString title;
     title = normalTitle("replace: ");
     simRepFound = false;
-    repLab = new QLabel (title);
-    arrowLab = new QLabel (" ==> ");
-    fromText = new QLineEdit();
-    toText = new QLineEdit();
-    hLayout1 = new QHBoxLayout();
-    hLayout1->addWidget(repLab);
-    hLayout1->addWidget(fromText);
-    hLayout1->addWidget(arrowLab);
-    hLayout1->addWidget(toText);
+    repLab = QSharedPointer<QLabel>( new QLabel(title) );
+    arrowLab = QSharedPointer<QLabel>( new QLabel (" ==> ") );
+    fromText = QSharedPointer<QLineEdit>( new QLineEdit() );
+    toText = QSharedPointer<QLineEdit>( new QLineEdit() );
+    hLayout1 = QSharedPointer<QHBoxLayout>( new QHBoxLayout() );
+    hLayout1->addWidget(repLab.data());
+    hLayout1->addWidget(fromText.data());
+    hLayout1->addWidget(arrowLab.data());
+    hLayout1->addWidget(toText.data());
 
-    insensitive = new QRadioButton("insensitive");
-    sensitive = new QRadioButton("sensitive");
+    insensitive = QSharedPointer<QRadioButton>( new QRadioButton("insensitive") );
+    sensitive = QSharedPointer<QRadioButton>( new QRadioButton("sensitive") );
     insensitive->setGeometry(QRect(0,25,92,21));
     sensitive->setGeometry(QRect(0,55,92,21));
 
     title = normalTitle("regular expression replace:");
-    regexp = new QLabel(title);
-    regAll = new QPushButton("replace all");
-    spacer = new QSpacerItem(this->width()/3,21);
-    hLayout2 = new QHBoxLayout();
-    hLayout2->addWidget(regAll);
-    hLayout2->addSpacerItem(spacer);
+    regexp =  QSharedPointer<QLabel>( new QLabel(title) );
+    regAll = QSharedPointer<QPushButton>( new QPushButton( "replace all" ) );
+    spacer = new QSpacerItem( this->width() / 3, 21 );
+    hLayout2 = QSharedPointer<QHBoxLayout>( new QHBoxLayout() );
+    hLayout2->addWidget( regAll.data() );
+    hLayout2->addSpacerItem( spacer );
 
     title = normalTitle("simple pattern replace:");
-    simple = new QLabel(title);
-    simNextOne = new QPushButton("skip");
-    simRepThis = new QPushButton("replace this");
-    simRepAll = new QPushButton("replace all");
-    hLayout3 = new QHBoxLayout();
-    hLayout3->addWidget(simNextOne);
-    hLayout3->addWidget(simRepThis);
-    hLayout3->addWidget(simRepAll);
+    simple = QSharedPointer<QLabel>( new QLabel( title ) );
+    simNextOne = QSharedPointer<QPushButton>( new QPushButton( "skip" ) );
+    simRepThis = QSharedPointer<QPushButton>( new QPushButton( "replace this" ) );
+    simRepAll = QSharedPointer<QPushButton>( new QPushButton( "replace all" ) );
+    hLayout3 = QSharedPointer<QHBoxLayout>( new QHBoxLayout() );
+    hLayout3->addWidget(simNextOne.data());
+    hLayout3->addWidget(simRepThis.data());
+    hLayout3->addWidget(simRepAll.data());
 
-    vLayout = new QVBoxLayout();
-    vLayout->addLayout(hLayout1);
-    vLayout->addWidget(regexp);
-    vLayout->addLayout(hLayout2);
-    vLayout->addWidget(simple);
-    vLayout->addWidget(insensitive);
-    vLayout->addWidget(sensitive);
-    vLayout->addLayout(hLayout3);
+    vLayout = QSharedPointer<QVBoxLayout>(new QVBoxLayout());
+    vLayout->addLayout(hLayout1.data());
+    vLayout->addWidget(regexp.data());
+    vLayout->addLayout(hLayout2.data());
+    vLayout->addWidget(simple.data());
+    vLayout->addWidget(insensitive.data());
+    vLayout->addWidget(sensitive.data());
+    vLayout->addLayout(hLayout3.data());
 
     QIcon icon;
     icon.addFile(":/images/replace.ico");
-    this->setLayout(vLayout);
+    this->setLayout(vLayout.data());
     this->setWindowTitle("replace window");
     this->setWindowFlags(windowFlags()& ~Qt::WindowMaximizeButtonHint); // maxBnt 按位取反
     this->setWindowIcon(QIcon(ICON_PATH));
 
-    charFormat = new QTextCharFormat();
+    charFormat = QSharedPointer<QTextCharFormat>( new QTextCharFormat() );
     QColor color(100,0,100,100);
     charFormat->setBackground(color);
 
-    connect(simRepThis,SIGNAL(clicked()),this,SLOT(simRepThisFun()));
-    connect(simRepAll,SIGNAL(clicked()),this,SLOT(simRepAllFun()));
-    connect(simNextOne,SIGNAL(clicked()),this,SLOT(simSkip()));
-    connect(regAll,SIGNAL(clicked()),this,SLOT(regRepAll()));
+    connect(simRepThis.data(),SIGNAL(clicked()),this,SLOT(simRepThisFun()));
+    connect(simRepAll.data(),SIGNAL(clicked()),this,SLOT(simRepAllFun()));
+    connect(simNextOne.data(),SIGNAL(clicked()),this,SLOT(simSkip()));
+    connect(regAll.data(),SIGNAL(clicked()),this,SLOT(regRepAll()));
+
+    LOGDBG("textReplace() finished.");
 }
 
 textReplace::~textReplace()
 {
-    LOGDBG( "~ textReplace ~" );
+    textEdit = NULL;
+    tabWidget = NULL;
+    LOGDBG("~textReplace() finished.");
 }
 
 QString textReplace::getPattern()
@@ -98,7 +103,7 @@ void textReplace::simSkip()
                              QMessageBox::Ok);
         return ;
     }
-    highlighter = new simLighter(textEdit->document(),from);
+    highlighter =  QSharedPointer<simLighter>( new simLighter(textEdit->document(),from) );
 
     QString to = toText->text();
     bool sensi = false;
@@ -143,7 +148,7 @@ void textReplace::simRepAllFun()
                              QMessageBox::Ok);
         return ;
     }
-    highlighter = new simLighter(textEdit->document(),from);
+    highlighter = QSharedPointer<simLighter>( new simLighter(textEdit->document(),from) );
 
     QString to = toText->text();
     bool sensi = false;
@@ -229,12 +234,7 @@ void textReplace::closeEvent(QCloseEvent *event)
     LOGDBG("%s","close event");
     // we can make sure that pattern match nothing by the following way.
     QString pattern = textEdit->toPlainText()+"hahhahaha";
-    highlighter = new simLighter(textEdit->document(), pattern);
-    if( NULL != highlighter )
-    {
-        delete highlighter;
-        highlighter = NULL;
-    }
+    highlighter = QSharedPointer<simLighter>( new simLighter(textEdit->document(), pattern) );
     QWidget::closeEvent(event);
 }
 

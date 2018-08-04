@@ -15,7 +15,7 @@ CXX           = /Library/Developer/CommandLineTools/usr/bin/clang++
 DEFINES       = -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 $(EXPORT_ARCH_ARGS) -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.13.sdk -mmacosx-version-min=10.10 -Wall -W -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -stdlib=libc++ -O2 -std=gnu++11 $(EXPORT_ARCH_ARGS) -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.13.sdk -mmacosx-version-min=10.10 -Wall -W -fPIC $(DEFINES)
-INCPATH       = -I. -I../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers -I../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers -I../../Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers -I../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers -Ibuild/moc_cpp -I/Library/Developer/CommandLineTools/SDKs/MacOSX10.13.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Library/Developer/CommandLineTools/SDKs/MacOSX10.13.sdk/System/Library/Frameworks/AGL.framework/Headers -I../../Qt5.9.2/5.9.2/clang_64/mkspecs/macx-clang -F/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib
+INCPATH       = -I. -IInc -I../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers -I../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers -I../../Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers -I../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers -Ibuild/moc_cpp -I/Library/Developer/CommandLineTools/SDKs/MacOSX10.13.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Library/Developer/CommandLineTools/SDKs/MacOSX10.13.sdk/System/Library/Frameworks/AGL.framework/Headers -I../../Qt5.9.2/5.9.2/clang_64/mkspecs/macx-clang -F/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib
 QMAKE         = /Users/weiyang/Qt5.9.2/5.9.2/clang_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -738,10 +738,17 @@ build/moc_cpp/moc_textreplace.cpp: ../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.fr
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qtextformat.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QTabWidget \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qtabwidget.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QSharedPointer \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qsharedpointer.h \
+		Inc/simlighter.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
 		Inc/textreplace.h \
 		build/moc_cpp/moc_predefs.h \
 		../../Qt5.9.2/5.9.2/clang_64/bin/moc
-	/Users/weiyang/Qt5.9.2/5.9.2/clang_64/bin/moc $(DEFINES) --include ./build/moc_cpp/moc_predefs.h -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/mkspecs/macx-clang -I/Users/weiyang/pro/notepad -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers -I/Library/Developer/CommandLineTools/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/9.0.0/include -I/Library/Developer/CommandLineTools/usr/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX10.13.sdk/usr/include -F/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib Inc/textreplace.h -o build/moc_cpp/moc_textreplace.cpp
+	/Users/weiyang/Qt5.9.2/5.9.2/clang_64/bin/moc $(DEFINES) --include ./build/moc_cpp/moc_predefs.h -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/mkspecs/macx-clang -I/Users/weiyang/pro/notepad -I/Users/weiyang/pro/notepad/Inc -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers -I/Library/Developer/CommandLineTools/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/9.0.0/include -I/Library/Developer/CommandLineTools/usr/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX10.13.sdk/usr/include -F/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib Inc/textreplace.h -o build/moc_cpp/moc_textreplace.cpp
 
 build/moc_cpp/moc_textfind.cpp: ../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
@@ -764,10 +771,16 @@ build/moc_cpp/moc_textfind.cpp: ../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.frame
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QCloseEvent \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qevent.h \
+		Inc/regLighter.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
+		Inc/simlighter.h \
 		Inc/textfind.h \
 		build/moc_cpp/moc_predefs.h \
 		../../Qt5.9.2/5.9.2/clang_64/bin/moc
-	/Users/weiyang/Qt5.9.2/5.9.2/clang_64/bin/moc $(DEFINES) --include ./build/moc_cpp/moc_predefs.h -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/mkspecs/macx-clang -I/Users/weiyang/pro/notepad -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers -I/Library/Developer/CommandLineTools/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/9.0.0/include -I/Library/Developer/CommandLineTools/usr/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX10.13.sdk/usr/include -F/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib Inc/textfind.h -o build/moc_cpp/moc_textfind.cpp
+	/Users/weiyang/Qt5.9.2/5.9.2/clang_64/bin/moc $(DEFINES) --include ./build/moc_cpp/moc_predefs.h -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/mkspecs/macx-clang -I/Users/weiyang/pro/notepad -I/Users/weiyang/pro/notepad/Inc -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers -I/Library/Developer/CommandLineTools/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/9.0.0/include -I/Library/Developer/CommandLineTools/usr/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX10.13.sdk/usr/include -F/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib Inc/textfind.h -o build/moc_cpp/moc_textfind.cpp
 
 build/moc_cpp/moc_notepad.cpp: ../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QMainWindow \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qmainwindow.h \
@@ -783,6 +796,12 @@ build/moc_cpp/moc_notepad.cpp: ../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framew
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qtimer.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QIcon \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qicon.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QTranslator \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qtranslator.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QMutex \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qmutex.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QSharedPointer \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qsharedpointer.h \
 		Inc/textfind.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
@@ -803,6 +822,12 @@ build/moc_cpp/moc_notepad.cpp: ../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framew
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QCloseEvent \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qevent.h \
+		Inc/regLighter.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
+		Inc/simlighter.h \
 		Inc/textreplace.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QSpacerItem \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qlayoutitem.h \
@@ -810,25 +835,16 @@ build/moc_cpp/moc_notepad.cpp: ../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framew
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qtextcursor.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QTextCharFormat \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qtextformat.h \
-		Inc/regLighter.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
 		Inc/xmlrecorder.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers/QDomElement \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers/qdom.h \
 		Inc/charmap.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QMap \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qmap.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QTranslator \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qtranslator.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QMutex \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qmutex.h \
 		Inc/notepad.h \
 		build/moc_cpp/moc_predefs.h \
 		../../Qt5.9.2/5.9.2/clang_64/bin/moc
-	/Users/weiyang/Qt5.9.2/5.9.2/clang_64/bin/moc $(DEFINES) --include ./build/moc_cpp/moc_predefs.h -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/mkspecs/macx-clang -I/Users/weiyang/pro/notepad -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers -I/Library/Developer/CommandLineTools/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/9.0.0/include -I/Library/Developer/CommandLineTools/usr/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX10.13.sdk/usr/include -F/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib Inc/notepad.h -o build/moc_cpp/moc_notepad.cpp
+	/Users/weiyang/Qt5.9.2/5.9.2/clang_64/bin/moc $(DEFINES) --include ./build/moc_cpp/moc_predefs.h -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/mkspecs/macx-clang -I/Users/weiyang/pro/notepad -I/Users/weiyang/pro/notepad/Inc -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers -I/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers -I/Library/Developer/CommandLineTools/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/9.0.0/include -I/Library/Developer/CommandLineTools/usr/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX10.13.sdk/usr/include -F/Users/weiyang/Qt5.9.2/5.9.2/clang_64/lib Inc/notepad.h -o build/moc_cpp/moc_notepad.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -846,15 +862,9 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 
 ####### Compile
 
-build/xmlrecorder.o: Src/xmlrecorder.cpp Inc/xmlrecorder.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QTabWidget \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qtabwidget.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers/QDomElement \
+build/xmlrecorder.o: Src/xmlrecorder.cpp ../../Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers/QDomComment \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers/qdom.h \
-		Inc/log.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QDebug \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers/QDomComment \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers/QDomElement \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QTextEdit \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qtextedit.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QCoreApplication \
@@ -866,6 +876,8 @@ build/xmlrecorder.o: Src/xmlrecorder.cpp Inc/xmlrecorder.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers/QXmlInputSource \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers/qxml.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers/QXmlSimpleReader \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QDebug \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QtCore \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qglobal.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qabstractanimation.h \
@@ -1030,10 +1042,20 @@ build/xmlrecorder.o: Src/xmlrecorder.cpp Inc/xmlrecorder.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qwineventnotifier.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qxmlstream.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qtcoreversion.h \
-		inc/commondata.h
+		Inc/commondata.h \
+		Inc/xmlrecorder.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QTabWidget \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qtabwidget.h \
+		Inc/log.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/xmlrecorder.o Src/xmlrecorder.cpp
 
-build/textreplace.o: Src/textreplace.cpp Inc/textreplace.h \
+build/textreplace.o: Src/textreplace.cpp ../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QRegExp \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qregexp.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QCoreApplication \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qcoreapplication.h \
+		Inc/textreplace.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QLabel \
@@ -1063,105 +1085,24 @@ build/textreplace.o: Src/textreplace.cpp Inc/textreplace.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qtextformat.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QTabWidget \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qtabwidget.h \
-		Inc/log.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
-		Inc/regLighter.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QSharedPointer \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qsharedpointer.h \
+		Inc/simlighter.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
-		Inc/simlighter.h \
-		Inc/commondata.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QRegExp \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qregexp.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QCoreApplication \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qcoreapplication.h
+		Inc/log.h \
+		Inc/regLighter.h \
+		Inc/commondata.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/textreplace.o Src/textreplace.cpp
 
-build/textfind.o: Src/textfind.cpp Inc/textfind.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QLabel \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qlabel.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QLineEdit \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qlineedit.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QPushButton \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qpushbutton.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QVBoxLayout \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qboxlayout.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QHBoxLayout \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QGroupBox \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qgroupbox.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QRadioButton \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qradiobutton.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QTextEdit \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qtextedit.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QDebug \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QCloseEvent \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qevent.h \
-		Inc/regLighter.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
-		Inc/simlighter.h \
-		Inc/log.h \
-		Inc/commondata.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QTextCharFormat \
+build/textfind.o: Src/textfind.cpp ../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QTextCharFormat \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qtextformat.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QColor \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qcolor.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/textfind.o Src/textfind.cpp
-
-build/simlighter.o: Src/simlighter.cpp Inc/simlighter.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QTextEdit \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qtextedit.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QDebug \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QTextCursor \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qtextcursor.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/simlighter.o Src/simlighter.cpp
-
-build/regLighter.o: Src/regLighter.cpp Inc/regLighter.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QTextEdit \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qtextedit.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QDebug \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QTextCharFormat \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qtextformat.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QColor \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qcolor.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QRegularExpression \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qregularexpression.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/regLighter.o Src/regLighter.cpp
-
-build/notepad.o: Src/notepad.cpp Inc/notepad.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QMainWindow \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qmainwindow.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QMenu \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qmenu.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QMenuBar \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qmenubar.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QTabWidget \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qtabwidget.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QTextEdit \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qtextedit.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QTimer \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qtimer.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QIcon \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qicon.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
 		Inc/textfind.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
@@ -1178,35 +1119,56 @@ build/notepad.o: Src/notepad.cpp Inc/notepad.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qgroupbox.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QRadioButton \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qradiobutton.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QTextEdit \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qtextedit.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QDebug \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QCloseEvent \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qevent.h \
-		Inc/textreplace.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QSpacerItem \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qlayoutitem.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QTextCursor \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qtextcursor.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QTextCharFormat \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qtextformat.h \
 		Inc/regLighter.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
-		Inc/xmlrecorder.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers/QDomElement \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers/qdom.h \
-		Inc/charmap.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QMap \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qmap.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QTranslator \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qtranslator.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QMutex \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qmutex.h \
+		Inc/simlighter.h \
 		Inc/log.h \
-		Inc/commondata.h \
-		Inc/handler.h \
+		Inc/commondata.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/textfind.o Src/textfind.cpp
+
+build/simlighter.o: Src/simlighter.cpp Inc/simlighter.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QTextEdit \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qtextedit.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QDebug \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QTextCursor \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qtextcursor.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/simlighter.o Src/simlighter.cpp
+
+build/regLighter.o: Src/regLighter.cpp ../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QTextCharFormat \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qtextformat.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QColor \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qcolor.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QRegularExpression \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qregularexpression.h \
+		Inc/regLighter.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QTextEdit \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qtextedit.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QDebug \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qdebug.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/regLighter.o Src/regLighter.cpp
+
+build/notepad.o: Src/notepad.cpp ../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QIcon \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qicon.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QDebug \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QtCore \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qglobal.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qabstractanimation.h \
@@ -1284,6 +1246,7 @@ build/notepad.o: Src/notepad.cpp Inc/notepad.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qlocale.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qlockfile.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qloggingcategory.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qmap.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qmargins.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qmath.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qmessageauthenticationcode.h \
@@ -1292,6 +1255,7 @@ build/notepad.o: Src/notepad.cpp Inc/notepad.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qmimedata.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qmimedatabase.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qmimetype.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qmutex.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qnamespace.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qnumeric.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qobject.h \
@@ -1337,6 +1301,7 @@ build/notepad.o: Src/notepad.cpp Inc/notepad.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstate.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstatemachine.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstorageinfo.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstringbuilder.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstringlist.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstringlistmodel.h \
@@ -1353,7 +1318,9 @@ build/notepad.o: Src/notepad.cpp Inc/notepad.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qthreadpool.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qthreadstorage.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qtimeline.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qtimer.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qtimezone.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qtranslator.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qtypeinfo.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qtypetraits.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qurl.h \
@@ -1378,11 +1345,7 @@ build/notepad.o: Src/notepad.cpp Inc/notepad.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QtGlobal \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QDesktopServices \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qdesktopservices.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QUrl
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/notepad.o Src/notepad.cpp
-
-build/main.o: Src/main.cpp ../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QApplication \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qapplication.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QUrl \
 		Inc/notepad.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QMainWindow \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qmainwindow.h \
@@ -1395,9 +1358,9 @@ build/main.o: Src/main.cpp ../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QTextEdit \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qtextedit.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QTimer \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qtimer.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QIcon \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qicon.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QTranslator \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QMutex \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QSharedPointer \
 		Inc/textfind.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
@@ -1414,10 +1377,13 @@ build/main.o: Src/main.cpp ../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qgroupbox.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QRadioButton \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qradiobutton.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QDebug \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QCloseEvent \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qevent.h \
+		Inc/regLighter.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
+		Inc/simlighter.h \
 		Inc/textreplace.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QSpacerItem \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qlayoutitem.h \
@@ -1425,34 +1391,85 @@ build/main.o: Src/main.cpp ../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qtextcursor.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QTextCharFormat \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qtextformat.h \
-		Inc/regLighter.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
 		Inc/xmlrecorder.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers/QDomElement \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers/qdom.h \
 		Inc/charmap.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QMap \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qmap.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QTranslator \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qtranslator.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QMutex \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qmutex.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/main.o Src/main.cpp
+		Inc/log.h \
+		Inc/commondata.h \
+		Inc/handler.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/notepad.o Src/notepad.cpp
 
-build/handler.o: Src/handler.cpp Inc/handler.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QTextEdit \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qtextedit.h \
+build/main.o: Src/main.cpp ../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QApplication \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qapplication.h \
 		Inc/log.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QDebug \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QStringList \
+		Inc/notepad.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QMainWindow \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QMenu \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qmenu.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QMenuBar \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qmenubar.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QTabWidget \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qtabwidget.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QTextEdit \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qtextedit.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QTimer \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qtimer.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QIcon \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qicon.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QTranslator \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qtranslator.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QMutex \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qmutex.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QSharedPointer \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qsharedpointer.h \
+		Inc/textfind.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QLabel \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qlabel.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QLineEdit \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qlineedit.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QPushButton \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qpushbutton.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QVBoxLayout \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qboxlayout.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QHBoxLayout \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QGroupBox \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qgroupbox.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QRadioButton \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qradiobutton.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QCloseEvent \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qevent.h \
+		Inc/regLighter.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
+		Inc/simlighter.h \
+		Inc/textreplace.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QSpacerItem \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qlayoutitem.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QTextCursor \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qtextcursor.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QTextCharFormat \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qtextformat.h \
+		Inc/xmlrecorder.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers/QDomElement \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers/qdom.h \
+		Inc/charmap.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QMap \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qmap.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/main.o Src/main.cpp
+
+build/handler.o: Src/handler.cpp ../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QStringList \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstringlist.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QtDebug \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QMutex \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qmutex.h \
 		Inc/notepad.h \
@@ -1464,10 +1481,16 @@ build/handler.o: Src/handler.cpp Inc/handler.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qmenubar.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QTabWidget \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qtabwidget.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QTextEdit \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qtextedit.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QTimer \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qtimer.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QIcon \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qicon.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QTranslator \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qtranslator.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QSharedPointer \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qsharedpointer.h \
 		Inc/textfind.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
@@ -1484,8 +1507,15 @@ build/handler.o: Src/handler.cpp Inc/handler.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qgroupbox.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QRadioButton \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qradiobutton.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QDebug \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QCloseEvent \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qevent.h \
+		Inc/regLighter.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
+		Inc/simlighter.h \
 		Inc/textreplace.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QSpacerItem \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qlayoutitem.h \
@@ -1493,34 +1523,33 @@ build/handler.o: Src/handler.cpp Inc/handler.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qtextcursor.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QTextCharFormat \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qtextformat.h \
-		Inc/regLighter.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
 		Inc/xmlrecorder.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers/QDomElement \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtXml.framework/Headers/qdom.h \
 		Inc/charmap.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QMap \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qmap.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QTranslator \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qtranslator.h
+		Inc/handler.h \
+		Inc/log.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/handler.o Src/handler.cpp
 
-build/charmap.o: Src/charmap.cpp Inc/charmap.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QMap \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qmap.h \
-		Inc/log.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QDebug \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QFile \
+build/charmap.o: Src/charmap.cpp ../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QFile \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qfile.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QTextStream \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qtextstream.h
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qtextstream.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QDebug \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
+		Inc/charmap.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QMap \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qmap.h \
+		Inc/log.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/charmap.o Src/charmap.cpp
 
-build/log.o: Src/log.cpp Inc/log.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QDebug \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qdebug.h
+build/log.o: Src/log.cpp ../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QDebug \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QCoreApplication \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qcoreapplication.h \
+		Inc/log.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/log.o Src/log.cpp
 
 build/qrc_image.o: qrc_image.cpp 

@@ -3,6 +3,12 @@
 
 #include <stdarg.h>
 #include <QDebug>
+#include <stdio.h>
+#include <unistd.h>
+
+static QString logFilePath;
+
+void LogInit();
 
 void LOGBASE(const char *file, const int line, const char *funcName, const char * fmt, ...);
 

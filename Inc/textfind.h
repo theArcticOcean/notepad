@@ -13,12 +13,16 @@
 #include <QDebug>
 #include <QCloseEvent>
 
+#include "regLighter.h"
+#include "simlighter.h"
+
 class textFind : public QWidget
 {
     Q_OBJECT
 
 public:
     explicit textFind(QWidget *parent = 0);
+    ~textFind();
     QString getPattern();
     void setTextEdit(QTextEdit *textEdit);
     void search();
@@ -38,7 +42,7 @@ private:
     QRadioButton *regExp;
 
     QTextEdit *textEdit;
-
+    void *highlighter;
 signals:
 
 public slots:

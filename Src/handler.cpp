@@ -1,12 +1,13 @@
-#include "./Inc/handler.h"
-#include "./Inc/log.h"
 #include <QStringList>
 #include <stdio.h>
 #include <QtDebug>
 #include <QMutex>
 #include <fcntl.h>
 #include <unistd.h>
-#include "./Inc/notepad.h"
+
+#include "notepad.h"
+#include "handler.h"
+#include "log.h"
 
 QMutex notePad::mutexForRW;
 

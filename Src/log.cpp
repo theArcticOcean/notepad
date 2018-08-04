@@ -1,6 +1,8 @@
-#include "Inc/log.h"
 #include <stdio.h>
 #include <QDebug>
+#include <QCoreApplication>
+
+#include "log.h"
 
 void LOGBASE(const char *file, const int line, const char *funcName, const char * fmt, ...)
 {
@@ -12,5 +14,25 @@ void LOGBASE(const char *file, const int line, const char *funcName, const char 
     va_start(vap, fmt);  //variable arguments list vap init
     vsnprintf(buffer+n, BUFFSIZE-n, fmt, vap); // add list vap to buff
     va_end(vap);
-    qDebug()<<buffer;
+
+    FILE *fp;
+    fp = fopen( logFilePath.toStdString().c_str(), "a" );
+    if( NULL != fp )
+    {
+        fprintf( fp, "%s\n", buffer );
+        fclose( fp );
+    }
+}
+
+void LogInit()
+{
+    logFilePath = QCoreApplication::applicationDirPath();
+    logFilePath = logFilePath + "/log.txt";
+    if(  0 == access( logFilePath.toStdString().c_str(), F_OK )
+         && truncate( logFilePath.toStdString().c_str(), 0 ) )
+    {
+        QString prefix = "[logInit] ";
+        prefix = prefix + logFilePath;
+        perror( prefix.toStdString().c_str() );
+    }
 }

@@ -1,7 +1,8 @@
-#include "./Inc/regLighter.h"
 #include <QTextCharFormat>
 #include <QColor>
 #include <QRegularExpression>
+
+#include "regLighter.h"
 
 regLighter::regLighter(QTextDocument * parent,QString pattern):
     QSyntaxHighlighter(parent)

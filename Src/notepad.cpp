@@ -1,7 +1,3 @@
-#include "./Inc/notepad.h"
-#include "Inc/log.h"
-#include "Inc/commondata.h"
-#include "./Inc/handler.h"
 #include <QIcon>
 #include <QDebug>
 #include <QtCore>
@@ -18,6 +14,11 @@
 #include <QtGlobal>
 #include <QDesktopServices>
 #include <QUrl>
+
+#include "notepad.h"
+#include "log.h"
+#include "commondata.h"
+#include "handler.h"
 
 unsigned int notePad::encryptBytes = 0;
 
@@ -46,7 +47,6 @@ notePad::notePad(QWidget *parent)
     }
 
     finder = NULL;
-    replacer = NULL;
     //QString tmp = RELATIVE_MAP_FILE_PATH;
     char_map = new charMap( RELATIVE_MAP_FILE_PATH );
     menubar = new QMenuBar();
@@ -73,9 +73,9 @@ notePad::notePad(QWidget *parent)
         text->setTabChangesFocus( true );
         text->setPlainText("");
 
-        QIcon *icon = new QIcon(":/images/new.png");
+        QIcon icon(":/images/new.png");
         fileName = "new 1";
-        tabwidget->addTab(text,*icon,fileName);
+        tabwidget->addTab(text, icon,fileName);
     }
     path = appPath+"/backup/"+tabwidget->tabText(tabwidget->currentIndex());
     QString qDir = appPath+"/backup";
@@ -370,8 +370,8 @@ void notePad::actionNew_triggered()
     path = appPath+"/backup/"+fileName;
     QTextEdit *text = new QTextEdit();
     text->setPlainText("");
-    QIcon *icon = new QIcon(":/images/new.png");
-    tabwidget->addTab(text,*icon,fileName);
+    QIcon icon(":/images/new.png");
+    tabwidget->addTab(text,icon,fileName);
     tabwidget->setCurrentWidget(text);
     QString label = QString("new &%1").arg(newCount);
     tabwidget->setTabText(newCount-1,label);
@@ -466,10 +466,7 @@ void notePad::actionFind_triggered()
 void notePad::actionReplace_triggered()
 {
     QTextEdit *textEdit = (QTextEdit *)tabwidget->currentWidget();
-    if( NULL == replacer )
-    {
-        replacer = new textReplace();
-    }
+    replacer = QSharedPointer<textReplace>( new textReplace() );
     replacer->setTabWidget(tabwidget);
     replacer->setTextEdit(textEdit);
     // forbid maximize when click father widget.
@@ -536,9 +533,9 @@ void notePad::closeEvent(QCloseEvent *event)
     if(finder){
         finder->close();
     }
-    if(replacer){
-        replacer->close();
-    }
+//    if( NULL != replacer.data() ){
+//        replacer->close();
+//    }
     recorder->writeXML();
     QWidget::closeEvent(event);
 }

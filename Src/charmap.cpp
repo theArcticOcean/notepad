@@ -1,5 +1,3 @@
-#include "./Inc/charmap.h"
-#include "./Inc/log.h"
 #include <stdlib.h>
 #include <time.h>
 #include <QFile>
@@ -9,6 +7,9 @@
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
+
+#include "charmap.h"
+#include "log.h"
 
 charMap::charMap(char *str):filepath(str)
 {

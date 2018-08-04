@@ -1,14 +1,16 @@
-#include "./Inc/textfind.h"
-#include "./Inc/regLighter.h"
-#include "./Inc/simlighter.h"
-#include "./Inc/log.h"
-#include "Inc/commondata.h"
 #include <QTextCharFormat>
 #include <QColor>
 #include <QMessageBox>
 
-textFind::textFind(QWidget *parent):
-    QWidget(parent)
+#include "textfind.h"
+#include "regLighter.h"
+#include "simlighter.h"
+#include "log.h"
+#include "commondata.h"
+
+textFind::textFind(QWidget *parent)
+    : QWidget(parent)
+    , highlighter( NULL )
 {
     label = new QLabel("find :  ");
     line = new QLineEdit();
@@ -31,7 +33,7 @@ textFind::textFind(QWidget *parent):
     hLayout2->addWidget(group1);
     vLayout->addLayout(hLayout2);
     QIcon icon;
-    icon.addFile(":/images/find.ico");
+    icon.addFile(": /images/find.ico");
     this->setWindowIcon(icon);
     this->resize(400,180);
     this->setLayout(vLayout);
@@ -39,6 +41,16 @@ textFind::textFind(QWidget *parent):
     this->setWindowIcon(QIcon(ICON_PATH));
 
     connect(findButton,SIGNAL(clicked()),this,SLOT(setPattern()));
+}
+
+textFind::~textFind()
+{
+    LOGDBG( "~ textFind ~" );
+//    if( NULL != highlighter )
+//    {
+//        delete highlighter;
+//        highlighter = NULL;
+//    }
 }
 
 QString textFind::getPattern()
@@ -58,11 +70,27 @@ void textFind::search()
         return ;
     }
 
-    if(regExp->isChecked()) regLighter *highlighter = \
-            new regLighter(textEdit->document(),pattern);
-    else if(simpleText->isChecked()) simLighter *highlighter = \
-            new simLighter(textEdit->document(),pattern);
-    else QMessageBox::information(this,"find pattern","please choose a find pattern.");
+    if(regExp->isChecked()){
+        if( NULL != highlighter )
+        {
+            delete highlighter;
+            highlighter = NULL;
+        }
+        highlighter = new regLighter(textEdit->document(),pattern);
+    }
+    else if(simpleText->isChecked())
+    {
+        if( NULL != highlighter )
+        {
+            delete highlighter;
+            highlighter = NULL;
+        }
+        highlighter = new simLighter(textEdit->document(),pattern);
+    }
+    else
+    {
+        QMessageBox::information(this,"find pattern","please choose a find pattern.");
+    }
 }
 
 void textFind::closeEvent(QCloseEvent *event)
@@ -70,7 +98,12 @@ void textFind::closeEvent(QCloseEvent *event)
     LOGDBG("%s","close event");
     // we can make sure that pattern match nothing by the following way.
     QString pattern = textEdit->toPlainText()+"hahhahaha";
-    regLighter *highlighter = new regLighter(textEdit->document(),pattern);
+    if( NULL != highlighter )
+    {
+        delete highlighter;
+        highlighter = NULL;
+    }
+    highlighter = new regLighter(textEdit->document(),pattern);
     QWidget::closeEvent(event);
 }
 

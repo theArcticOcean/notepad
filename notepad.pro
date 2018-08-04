@@ -10,6 +10,8 @@ win32{
     RC_FILE = res.rc
 }
 
+INCLUDEPATH += "Inc/"
+
 TARGET = myNote
 VERSION = 1.0
 MOC_DIR = ./build/moc_cpp

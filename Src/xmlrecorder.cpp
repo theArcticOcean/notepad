@@ -1,5 +1,3 @@
-#include "./Inc/xmlrecorder.h"
-#include "./Inc/log.h"
 #include <QDomComment>
 #include <QDomElement>
 #include <QTextEdit>
@@ -10,7 +8,10 @@
 #include <QXmlSimpleReader>
 #include <QDebug>
 #include <QtCore>
-#include "Inc/commondata.h"
+
+#include "commondata.h"
+#include "xmlrecorder.h"
+#include "log.h"
 
 xmlRecorder::xmlRecorder(QTabWidget *tabWidget)
 {
