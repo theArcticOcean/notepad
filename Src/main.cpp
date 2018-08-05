@@ -6,7 +6,7 @@
 int main(int argc,char **argv){
     QApplication app(argc,argv);
     LogInit();
-    notePad pad;
+    NotePad pad;
     pad.show();
     return app.exec();
 }

@@ -2,15 +2,15 @@
 #include <QColor>
 #include <QRegularExpression>
 
-#include "regLighter.h"
+#include "reglighter.h"
 
-regLighter::regLighter(QTextDocument * parent,QString pattern):
+RegLighter::RegLighter(QTextDocument * parent,QString pattern):
     QSyntaxHighlighter(parent)
 {
     this->pattern = pattern;
 }
 
-void regLighter::highlightBlock(const QString &text)
+void RegLighter::highlightBlock(const QString &text)
 {
     QTextCharFormat myClassFormat;
     QColor color(0,0,100,100);

@@ -4,12 +4,13 @@
 #include <QMutex>
 #include <fcntl.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include "notepad.h"
 #include "handler.h"
 #include "log.h"
 
-QMutex notePad::mutexForRW;
+QMutex NotePad::mutexForRW;
 
 QString baseName(QString str)
 {
@@ -19,7 +20,7 @@ QString baseName(QString str)
 
 char *bytesRead(const char *path, int *byte_number)
 {
-    notePad::mutexForRW.lock();
+    NotePad::mutexForRW.lock();
     int ret;
     FILE *fp = fopen(path,"r");
     fseek(fp,0,SEEK_END);
@@ -41,24 +42,27 @@ char *bytesRead(const char *path, int *byte_number)
     }
     fclose(fp);
     LOGDBG("path %s read %d bytes: %s",path,*byte_number,bytes);
-    notePad::mutexForRW.unlock();
+    NotePad::mutexForRW.unlock();
     return bytes;
 }
 
 
 void bytesWrite(const char *path, const char *bytes, const int byte_number)
 {
-    notePad::mutexForRW.lock();
+    NotePad::mutexForRW.lock();
     int ret;
 #ifdef Q_OS_LINUX
     int fd = open(path,O_WRONLY | O_CREAT | O_TRUNC, 0666);
 #else
     int fd = open(path,O_WRONLY | O_CREAT | O_TRUNC);
 #endif
-    if(fd == NULL){
-        LOGDBG("fopen failed.");
+
+    if( -1 == fd )
+    {
+        LOGDBG( "fopen failed: %s", strerror(errno) );
         return ;
     }
+
     LOGDBG("path: %s, write %d bytes: %s",path, byte_number, bytes);
     ret = write(fd,bytes,byte_number);
     if(ret <= 0){
@@ -68,5 +72,5 @@ void bytesWrite(const char *path, const char *bytes, const int byte_number)
     }
 end:
     close(fd);
-    notePad::mutexForRW.unlock();
+    NotePad::mutexForRW.unlock();
 }

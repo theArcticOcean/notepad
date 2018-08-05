@@ -6,12 +6,14 @@
 #include <QTextEdit>
 #include <QDebug>
 
-class regLighter : public QSyntaxHighlighter
+class RegLighter : public QSyntaxHighlighter
 {
-    QString pattern;
 public:
-    regLighter(QTextDocument * parent,QString pattern);
+    RegLighter(QTextDocument * parent,QString pattern);
     void highlightBlock(const QString &text);
+
+private:
+    QString pattern;
 };
 
 #endif // regLighter_H

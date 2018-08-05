@@ -20,13 +20,13 @@
 
 #include "simlighter.h"
 
-class textReplace : public QWidget
+class TextReplace : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit textReplace(QWidget *parent = 0);
-    ~textReplace();
+    explicit TextReplace(QWidget *parent = 0);
+    ~TextReplace();
     QString getPattern();
     void setTextEdit(QTextEdit *textEdit);
     void closeEvent(QCloseEvent *event);
@@ -52,7 +52,7 @@ private:
 
     QTextEdit* textEdit;
     QTabWidget* tabWidget;
-    QSharedPointer<simLighter> highlighter;
+    QSharedPointer<SimLighter> highlighter;
     bool simRepFound;
 
 signals:

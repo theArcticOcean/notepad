@@ -11,13 +11,13 @@
 #include "charmap.h"
 #include "log.h"
 
-charMap::charMap(char *str):filepath(str)
+CharMap::CharMap(const char *str) : filepath(str)
 {
     srand(time(NULL));
     limit = (1<<8)-1;
 }
 
-int charMap::myRandom(int limit)
+int CharMap::myRandom(int limit)
 {
 #ifdef Q_OS_WIN
     return int((double)rand()/RAND_MAX*limit+0.5);
@@ -26,7 +26,7 @@ int charMap::myRandom(int limit)
 #endif
 }
 
-void charMap::create_map()
+void CharMap::create_map()
 {
     if(0 != access(filepath,F_OK)){  // there is no encrypt code file.
         while(char_value_map.size() < limit+1){
@@ -63,7 +63,7 @@ void charMap::create_map()
     }
 }
 
-void charMap::read_map()
+void CharMap::read_map()
 {
     char_value_map.clear();
     FILE *fp = fopen(filepath,"r");
@@ -79,7 +79,7 @@ void charMap::read_map()
     fclose(fp);
 }
 
-void charMap::value_move(int value)
+void CharMap::value_move(int value)
 {
     while(char_value_map.contains(value)){
         value++;
@@ -89,7 +89,7 @@ void charMap::value_move(int value)
     char_value_map[value] = count;
 }
 
-QMap<int, int> charMap::getMap()
+QMap<int, int> CharMap::getMap()
 {
     return this->char_value_map;
 }

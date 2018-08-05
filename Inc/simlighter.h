@@ -7,12 +7,14 @@
 #include <QDebug>
 #include <QTextEdit>
 
-class simLighter : public QSyntaxHighlighter
-{
-    QString pattern;
+class SimLighter : public QSyntaxHighlighter
+{   
 public:
-    simLighter(QTextDocument * parent,QString pattern);
+    SimLighter(QTextDocument * parent,QString pattern);
     void highlightBlock(const QString &text);
+
+private:
+    QString pattern;
 };
 
 #endif // SIMLIGHTER_H

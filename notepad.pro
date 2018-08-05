@@ -22,25 +22,25 @@ HEADERS += \
     Inc/textreplace.h \
     Inc/textfind.h \
     Inc/simlighter.h \
-    Inc/regLighter.h \
     Inc/notepad.h \
     Inc/handler.h \
     Inc/charmap.h \
     Inc/xmlrecorder.h \
     Inc/log.h \
-    Inc/commondata.h
+    Inc/commondata.h \
+    Inc/reglighter.h
 
 SOURCES += \
     Src/xmlrecorder.cpp \
     Src/textreplace.cpp \
     Src/textfind.cpp \
     Src/simlighter.cpp \
-    Src/regLighter.cpp \
     Src/notepad.cpp \
     Src/main.cpp \
     Src/handler.cpp \
     Src/charmap.cpp \
-    Src/log.cpp
+    Src/log.cpp \
+    Src/reglighter.cpp
 
 RESOURCES += \
     image.qrc

@@ -54,12 +54,12 @@ SOURCES       = Src/xmlrecorder.cpp \
 		Src/textreplace.cpp \
 		Src/textfind.cpp \
 		Src/simlighter.cpp \
-		Src/regLighter.cpp \
 		Src/notepad.cpp \
 		Src/main.cpp \
 		Src/handler.cpp \
 		Src/charmap.cpp \
-		Src/log.cpp qrc_image.cpp \
+		Src/log.cpp \
+		Src/reglighter.cpp qrc_image.cpp \
 		build/moc_cpp/moc_textreplace.cpp \
 		build/moc_cpp/moc_textfind.cpp \
 		build/moc_cpp/moc_notepad.cpp
@@ -67,12 +67,12 @@ OBJECTS       = build/xmlrecorder.o \
 		build/textreplace.o \
 		build/textfind.o \
 		build/simlighter.o \
-		build/regLighter.o \
 		build/notepad.o \
 		build/main.o \
 		build/handler.o \
 		build/charmap.o \
 		build/log.o \
+		build/reglighter.o \
 		build/qrc_image.o \
 		build/moc_textreplace.o \
 		build/moc_textfind.o \
@@ -247,22 +247,22 @@ DIST          = ../../Qt5.9.2/5.9.2/clang_64/mkspecs/features/spec_pre.prf \
 		notepad.pro Inc/textreplace.h \
 		Inc/textfind.h \
 		Inc/simlighter.h \
-		Inc/regLighter.h \
 		Inc/notepad.h \
 		Inc/handler.h \
 		Inc/charmap.h \
 		Inc/xmlrecorder.h \
 		Inc/log.h \
-		Inc/commondata.h Src/xmlrecorder.cpp \
+		Inc/commondata.h \
+		Inc/reglighter.h Src/xmlrecorder.cpp \
 		Src/textreplace.cpp \
 		Src/textfind.cpp \
 		Src/simlighter.cpp \
-		Src/regLighter.cpp \
 		Src/notepad.cpp \
 		Src/main.cpp \
 		Src/handler.cpp \
 		Src/charmap.cpp \
-		Src/log.cpp
+		Src/log.cpp \
+		Src/reglighter.cpp
 QMAKE_TARGET  = myNote
 DESTDIR       = 
 TARGET        = myNote.app/Contents/MacOS/myNote
@@ -663,8 +663,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents image.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents ../../Qt5.9.2/5.9.2/clang_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents Inc/textreplace.h Inc/textfind.h Inc/simlighter.h Inc/regLighter.h Inc/notepad.h Inc/handler.h Inc/charmap.h Inc/xmlrecorder.h Inc/log.h Inc/commondata.h $(DISTDIR)/
-	$(COPY_FILE) --parents Src/xmlrecorder.cpp Src/textreplace.cpp Src/textfind.cpp Src/simlighter.cpp Src/regLighter.cpp Src/notepad.cpp Src/main.cpp Src/handler.cpp Src/charmap.cpp Src/log.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents Inc/textreplace.h Inc/textfind.h Inc/simlighter.h Inc/notepad.h Inc/handler.h Inc/charmap.h Inc/xmlrecorder.h Inc/log.h Inc/commondata.h Inc/reglighter.h $(DISTDIR)/
+	$(COPY_FILE) --parents Src/xmlrecorder.cpp Src/textreplace.cpp Src/textfind.cpp Src/simlighter.cpp Src/notepad.cpp Src/main.cpp Src/handler.cpp Src/charmap.cpp Src/log.cpp Src/reglighter.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -771,12 +771,13 @@ build/moc_cpp/moc_textfind.cpp: ../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.frame
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QCloseEvent \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qevent.h \
-		Inc/regLighter.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QSharedPointer \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qsharedpointer.h \
+		Inc/simlighter.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
-		Inc/simlighter.h \
 		Inc/textfind.h \
 		build/moc_cpp/moc_predefs.h \
 		../../Qt5.9.2/5.9.2/clang_64/bin/moc
@@ -822,12 +823,11 @@ build/moc_cpp/moc_notepad.cpp: ../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framew
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QCloseEvent \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qevent.h \
-		Inc/regLighter.h \
+		Inc/simlighter.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
-		Inc/simlighter.h \
 		Inc/textreplace.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QSpacerItem \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qlayoutitem.h \
@@ -1093,7 +1093,6 @@ build/textreplace.o: Src/textreplace.cpp ../../Qt5.9.2/5.9.2/clang_64/lib/QtWidg
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
 		Inc/log.h \
-		Inc/regLighter.h \
 		Inc/commondata.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/textreplace.o Src/textreplace.cpp
 
@@ -1125,12 +1124,13 @@ build/textfind.o: Src/textfind.cpp ../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framew
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qdebug.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QCloseEvent \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qevent.h \
-		Inc/regLighter.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QSharedPointer \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qsharedpointer.h \
+		Inc/simlighter.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
-		Inc/simlighter.h \
 		Inc/log.h \
 		Inc/commondata.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/textfind.o Src/textfind.cpp
@@ -1147,23 +1147,6 @@ build/simlighter.o: Src/simlighter.cpp Inc/simlighter.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QTextCursor \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qtextcursor.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/simlighter.o Src/simlighter.cpp
-
-build/regLighter.o: Src/regLighter.cpp ../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QTextCharFormat \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qtextformat.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QColor \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qcolor.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QRegularExpression \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qregularexpression.h \
-		Inc/regLighter.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QTextEdit \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qtextedit.h \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QDebug \
-		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qdebug.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/regLighter.o Src/regLighter.cpp
 
 build/notepad.o: Src/notepad.cpp ../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QIcon \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qicon.h \
@@ -1379,11 +1362,10 @@ build/notepad.o: Src/notepad.cpp ../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framewor
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qradiobutton.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QCloseEvent \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qevent.h \
-		Inc/regLighter.h \
+		Inc/simlighter.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
-		Inc/simlighter.h \
 		Inc/textreplace.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QSpacerItem \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qlayoutitem.h \
@@ -1445,12 +1427,11 @@ build/main.o: Src/main.cpp ../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qradiobutton.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QCloseEvent \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qevent.h \
-		Inc/regLighter.h \
+		Inc/simlighter.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
-		Inc/simlighter.h \
 		Inc/textreplace.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QSpacerItem \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qlayoutitem.h \
@@ -1510,12 +1491,11 @@ build/handler.o: Src/handler.cpp ../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framewo
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QDebug \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QCloseEvent \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qevent.h \
-		Inc/regLighter.h \
+		Inc/simlighter.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QSyntaxHighlighter \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qsyntaxhighlighter.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QString \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
-		Inc/simlighter.h \
 		Inc/textreplace.h \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/QSpacerItem \
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtWidgets.framework/Headers/qlayoutitem.h \
@@ -1551,6 +1531,14 @@ build/log.o: Src/log.cpp ../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Heade
 		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qcoreapplication.h \
 		Inc/log.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/log.o Src/log.cpp
+
+build/reglighter.o: Src/reglighter.cpp ../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QTextCharFormat \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qtextformat.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/QColor \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtGui.framework/Headers/qcolor.h \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/QRegularExpression \
+		../../Qt5.9.2/5.9.2/clang_64/lib/QtCore.framework/Headers/qregularexpression.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/reglighter.o Src/reglighter.cpp
 
 build/qrc_image.o: qrc_image.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/qrc_image.o qrc_image.cpp

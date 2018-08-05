@@ -3,14 +3,10 @@
 
 #include <QMap>
 
-class charMap
+class CharMap
 {
-    QMap<int,int> char_value_map;
-    int limit;
 public:
-    const char *filepath;
-
-    charMap(char *str);
+    CharMap(const char *str);
     int myRandom(int limit);
 
     //create map and write to local file
@@ -18,9 +14,13 @@ public:
 
     //read map from local file.
     void read_map();
-
     void value_move(int value);
     QMap<int,int> getMap();
+
+private:
+    QMap<int,int> char_value_map;
+    int limit;
+    const char *filepath;
 };
 
 #endif // CHARMAP_H

@@ -12,37 +12,42 @@
 #include <QTextEdit>
 #include <QDebug>
 #include <QCloseEvent>
+#include <QSharedPointer>
 
-#include "regLighter.h"
+#include "reglighter.h"
 #include "simlighter.h"
 
-class textFind : public QWidget
+enum HightLighterType{ NoType, regLighterType, simLighterType };
+
+class TextFind : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit textFind(QWidget *parent = 0);
-    ~textFind();
+    explicit TextFind(QWidget *parent = 0);
+    ~TextFind();
     QString getPattern();
     void setTextEdit(QTextEdit *textEdit);
     void search();
     void closeEvent(QCloseEvent *event);
 
 private:
+    void deleteHighLighterPtr();
+
     QString pattern;
 
-    QLabel *label;
-    QLineEdit *line;
-    QPushButton *findButton;
-    QVBoxLayout *vLayout;
-    QHBoxLayout *hLayout1;
-    QHBoxLayout *hLayout2;
-    QGroupBox *group1;
-    QRadioButton *simpleText;
-    QRadioButton *regExp;
+    QSharedPointer<QLabel> label;
+    QSharedPointer<QLineEdit> line;
+    QSharedPointer<QPushButton> findButton;
+    QSharedPointer<QVBoxLayout> vLayout;
+    QSharedPointer<QHBoxLayout> hLayout1, hLayout2;
+    QSharedPointer<QGroupBox> group1;
+    QSharedPointer<QRadioButton> simpleText, regExp;
 
     QTextEdit *textEdit;
     void *highlighter;
+    HightLighterType lighterType;
+
 signals:
 
 public slots:

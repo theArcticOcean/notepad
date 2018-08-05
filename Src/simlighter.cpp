@@ -1,13 +1,13 @@
-#include "./Inc/simlighter.h"
+#include "simlighter.h"
 #include <QTextCursor>
 
-simLighter::simLighter(QTextDocument *parent, QString pattern):
+SimLighter::SimLighter(QTextDocument *parent, QString pattern):
     QSyntaxHighlighter(parent)
 {
     this->pattern = pattern;
 }
 
-void simLighter::highlightBlock(const QString &text)
+void SimLighter::highlightBlock(const QString &text)
 {
     QTextCharFormat myClassFormat;
     QColor color( 0, 0, 100, 100 );
@@ -15,7 +15,7 @@ void simLighter::highlightBlock(const QString &text)
     int index = text.indexOf( pattern );
     while (index >= 0) {
         int length = pattern.length();
-        setFormat(index, length, myClassFormat);
-        index = text.indexOf(pattern, index + length);
+        setFormat( index, length, myClassFormat );
+        index = text.indexOf( pattern, index + length );
     }
 }

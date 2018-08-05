@@ -4,15 +4,18 @@
 #include <QTabWidget>
 #include <QDomElement>
 
-class xmlRecorder
+class XmlRecorder
 {
-    QTabWidget *tabWidget;
-    QString xmlPath;
 public:
-    xmlRecorder(QTabWidget *tabWidget);
+    XmlRecorder(QTabWidget *tabWidget);
     void writeXML();
     void readXML();
     QString readNode(QDomElement element);
+
+private:
+    QTabWidget *tabWidget;
+    QString xmlPath;
+
 };
 
 #endif // XMLRECORDER_H
