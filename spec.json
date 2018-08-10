@@ -1,0 +1,13 @@
+{
+    "title": "myNote Installer",
+    "icon": "image/logo.icns",
+    "background": "image/back.png",
+    "icon-size": 80,
+    "contents": [
+        { "x": 100, "y": 120, "type": "file", "path": "myNote.app" },
+        { "x": 400, "y": 120, "type": "link", "path": "/Applications" }
+    ],
+    "window": {
+        "size": { "width": 500, "height": 300 }
+    }
+}
